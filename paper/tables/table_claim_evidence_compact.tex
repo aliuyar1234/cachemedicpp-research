@@ -1,0 +1,11 @@
+\begin{tabular}{p{0.36\linewidth}p{0.13\linewidth}p{0.44\linewidth}}
+\toprule
+Claim (main text) & Value & Evidence source \\
+\midrule
+gpt2-medium clean score (CacheMedic++) & 0.2466 & \path{evidence/gpt2_medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.clean\_regression.cachemedic} \\
+gpt2-medium robustness AUC (CacheMedic++) & 0.0401 & \path{evidence/gpt2_medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.robustness\_auc.cachemedic} \\
+Paired ablation AUC (no\_contr $\rightarrow$ contr) & 0.0388 $\rightarrow$ 0.0401 & \path{evidence/gpt2_medium_no_contr/metrics/task_metrics.json} and \path{evidence/gpt2_medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.robustness\_auc.cachemedic} \\
+Paired sensitivity ratios ($\delta=1,2$) & 0.9291, 0.9266 & \path{evidence/gpt2_medium_no_contr/metrics/stability_metrics.json} and \path{evidence/gpt2_medium_contr/metrics/stability_metrics.json} \newline \texttt{metrics["stability.logit\_sensitivity"]} \\
+gpt2-large clean score / robustness AUC (CacheMedic++) & 0.3001 / 0.0475 & \path{evidence/gpt2_large_contr/metrics/task_metrics.json} \newline \texttt{metrics.clean\_regression.cachemedic}, \texttt{metrics.robustness\_auc.cachemedic} \\
+\bottomrule
+\end{tabular}

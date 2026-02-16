@@ -1,0 +1,15 @@
+{
+  "phase": "eval",
+  "run_id": "main_contr_vonly_tuned_loto_overwrite_lambda5",
+  "timestamp_utc": "2026-02-16T22:09:14+00:00",
+  "status": "completed",
+  "reason": "completed",
+  "step": 72,
+  "total_steps": 72,
+  "progress": 1.0,
+  "steps_remaining": 0,
+  "elapsed_wall_sec": 306.947771799998,
+  "eta_sec": 0.0,
+  "steps_per_sec": 0.23456759297446206,
+  "resumed_from": null
+}

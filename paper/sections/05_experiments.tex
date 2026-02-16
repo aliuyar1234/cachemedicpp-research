@@ -39,6 +39,15 @@ Figure~\ref{fig:robustness} shows the full robustness curve.
   \input{tables/table_main_results.tex}
 \end{table}
 
+\begin{table}[t]
+  \centering
+  \small
+  \caption{Compact claim-to-evidence map in main text (key quantitative claims and their exact evidence files/keys).}
+  \label{tab:claim_evidence_compact}
+  \vspace{2pt}
+  \input{tables/table_claim_evidence_compact.tex}
+\end{table}
+
 \subsection{Paired contraction ablation}
 Table~\ref{tab:ablations} isolates the contraction regularizer by toggling only $\lambda_{\mathrm{contr}}$.
 Contraction improves robustness AUC and reduces logit sensitivity relative to the no-contraction variant at both $\delta=1$ and $\delta=2$.
@@ -50,6 +59,46 @@ We stress that this paired comparison is the cleanest evidence that the stabilit
   \label{tab:ablations}
   \vspace{2pt}
   \input{tables/table_ablation_summary.tex}
+\end{table}
+
+\subsection{Three-seed replication (contr vs no\_contr)}
+To test run-to-run stability, we repeated the same paired configuration with two additional seeds (2026 and 2027) and combined them with the canonical seed (1234).
+Table~\ref{tab:seedrep} reports mean $\pm$ std over the 3-seed paired set.
+The average robustness AUC gain is small ($+0.0001 \pm 0.0012$), and the mean sensitivity ratios are above 1 ($1.0584 \pm 0.1628$ at $\delta=1$, $1.0892 \pm 0.2004$ at $\delta=2$), indicating substantial seed variance and no consistent stability gain across all seeds.
+We therefore treat the paired single-seed ablation as suggestive evidence and the 3-seed result as an explicit limitation that motivates stronger statistical reporting.
+
+\begin{table}[t]
+  \centering
+  \small
+  \caption{Three-seed replication for the paired contraction ablation (same tuned config, seeds 1234/2026/2027). Reported as mean $\pm$ std.}
+  \label{tab:seedrep}
+  \vspace{2pt}
+  \input{tables/table_seed_replication_3seed.tex}
+\end{table}
+
+Table~\ref{tab:seedrep_ci} adds bootstrap uncertainty over paired seeds ($B=20{,}000$).
+All intervals include no-effect thresholds (AUC gain $=0$, ratio $=1$), reinforcing that this effect is currently not statistically stable in our small-seed regime.
+
+\begin{table}[t]
+  \centering
+  \caption{Bootstrap uncertainty for the 3-seed paired replication (percentile CI over seed pairs, $B=20{,}000$).}
+  \label{tab:seedrep_ci}
+  \vspace{2pt}
+  \input{tables/table_seed_bootstrap_ci.tex}
+\end{table}
+
+\subsection{Mini hyper-sensitivity: $\lambda_{\mathrm{contr}}\in\{0,3,5\}$}
+Table~\ref{tab:lambda_sensitivity} provides a compact one-seed hyper-sensitivity check under the same tuned setup.
+The strongest setting is $\lambda_{\mathrm{contr}}=3.0$.
+Pushing contraction to $\lambda_{\mathrm{contr}}=5.0$ degrades clean score and robustness AUC and increases sensitivity beyond both $\lambda_{\mathrm{contr}}=3.0$ and $\lambda_{\mathrm{contr}}=0.0$.
+This is an explicit negative result and supports a ``sweet spot'' interpretation rather than monotonic gains from larger contraction weight.
+
+\begin{table}[t]
+  \centering
+  \caption{Mini hyper-sensitivity on the tuned V-only setup (single-seed comparison).}
+  \label{tab:lambda_sensitivity}
+  \vspace{2pt}
+  \input{tables/table_lambda_sensitivity.tex}
 \end{table}
 
 \subsection{Second model: gpt2-large}

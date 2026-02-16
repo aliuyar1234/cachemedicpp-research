@@ -24,6 +24,11 @@ and (ii) \textbf{robustness AUC} over the evaluation severity grid (Table~\ref{t
 We evaluate four inference-only heuristics from the harness (reset/clear, smoothing, masking/dropout, clipping/renorm).
 To avoid cherry-picking, we select \emph{best heuristic} as the heuristic with the highest robustness AUC on the evaluation grid, and report that method alongside no defense and CacheMedic++.
 
+\paragraph{Bootstrap uncertainty for paired replication.}
+For paired multi-seed comparisons (Sec.~\ref{tab:seedrep}), we report percentile bootstrap confidence intervals over seed-level paired statistics.
+We resample the seed pairs with replacement ($B=20{,}000$) and compute CIs from the 2.5th and 97.5th percentiles.
+We apply this to the robustness AUC gain (contr $-$ no\_contr) and sensitivity ratios at $\delta\in\{1,2\}$.
+
 \subsection{Stability metrics: logit sensitivity and amplification maps}
 \paragraph{Logit sensitivity.}
 We measure finite-difference logit drift under \emph{cache-state perturbations} at magnitudes $\delta \in \{0,1,2\}$.

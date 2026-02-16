@@ -8,6 +8,19 @@
   \item \textbf{Task coverage.} The needle-style long-context probe yields zero accuracy for all methods in the bundled runs; thus improvements in the aggregate score are driven by the other tasks (Appendix~\ref{app:eval_details}).
 \end{itemize}
 
+\subsection{Threats to validity}
+\paragraph{Internal validity.}
+Our conclusions rely on strict config matching between paired runs; accidental mismatch in corruption injection, checkpoint selection, or metric aggregation could bias ablation outcomes.
+We mitigate this with explicit evidence-path mapping and paired run records, but latent harness bugs remain possible.
+
+\paragraph{External validity.}
+Results are from GPT-2 medium/large with eager attention and batch size 1 under a synthetic but deterministic corruption family.
+Transfer to larger models, other inference kernels (for example flash attention), or non-simulated real-world fault patterns is not established.
+
+\paragraph{Statistical validity.}
+The 3-seed replication shows high variance, and bootstrap CIs over paired seeds cross no-effect thresholds.
+Therefore, claims about contraction should be interpreted as provisional at current sample size and motivate larger replicated studies.
+
 \paragraph{Ethical considerations.}
 This work studies how cache corruption affects model outputs and proposes a defensive repair mechanism.
 While our threat model includes targeted cache manipulations, we focus on reproducible perturbations that enable evaluation, and we report limitations in absolute stability.

@@ -1,0 +1,106 @@
+# T1 seed replication sweep for paired contr vs no_contr (same tuned config).
+# Seed 1234 already exists as canonical evidence pair:
+# - main_contr_vonly_tuned_loto_overwrite
+# - ablation_no_contr_vonly_tuned_loto_overwrite
+# This sweep adds two extra seeds (2026, 2027) for 3-seed reporting.
+
+sweep_name: recovery_vonly_seedrep_t1
+base_config: configs/fast_paper_base.yaml
+
+runs:
+  - name: main_contr_vonly_tuned_loto_overwrite_seed2026
+    overrides:
+      seed: 2026
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 3.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: ablation_no_contr_vonly_tuned_loto_overwrite_seed2026
+    overrides:
+      seed: 2026
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 0.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: main_contr_vonly_tuned_loto_overwrite_seed2027
+    overrides:
+      seed: 2027
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 3.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: ablation_no_contr_vonly_tuned_loto_overwrite_seed2027
+    overrides:
+      seed: 2027
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 0.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+budget:
+  max_total_gpu_hours: 8
+  per_run_gpu_hours_hint: 2
+  notes: "T1 seed replication add-on sweep; paired contr/no_contr for seeds 2026 and 2027."

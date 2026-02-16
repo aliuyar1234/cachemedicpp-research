@@ -1,0 +1,548 @@
+{
+  "run_id": "main_contr_vonly_tuned_loto_overwrite_seed2027",
+  "config_hash": "3f7b07f4db833320b1caaa4338eea4b60a986089ef77348d0a9a24bef74af1c1",
+  "metrics": {
+    "task_curves": [
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "no_defense",
+        "value": 35.72999852598916,
+        "score": 0.027987686573024164
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "reset_clear",
+        "value": 35.72999852598916,
+        "score": 0.027987686573024164
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "smoothing",
+        "value": 35.72999852598916,
+        "score": 0.027987686573024164
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "masking_dropout",
+        "value": 35.72999852598916,
+        "score": 0.027987686573024164
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "clipping_renorm",
+        "value": 35.72999852598916,
+        "score": 0.027987686573024164
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "cachemedic",
+        "value": 35.843320004804845,
+        "score": 0.02789920129792521
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "no_defense",
+        "value": 35.9202730135655,
+        "score": 0.027839432056163498
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "reset_clear",
+        "value": 36.31145072109141,
+        "score": 0.027539522110559815
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "smoothing",
+        "value": 35.95565980104595,
+        "score": 0.02781203308556474
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "masking_dropout",
+        "value": 36.18706507426016,
+        "score": 0.027634183594272735
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "clipping_renorm",
+        "value": 41.751961587544756,
+        "score": 0.023950970492804705
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "cachemedic",
+        "value": 36.027747355352815,
+        "score": 0.027756384270620382
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "no_defense",
+        "value": 35.89884342762834,
+        "score": 0.027856050627814474
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "reset_clear",
+        "value": 36.401490271991534,
+        "score": 0.027471402751041537
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "smoothing",
+        "value": 35.98732295456775,
+        "score": 0.02778756289436843
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "masking_dropout",
+        "value": 36.17734854208504,
+        "score": 0.027641605598505977
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "clipping_renorm",
+        "value": 42.09848005912154,
+        "score": 0.02375382670812906
+      },
+      {
+        "task": "wikitext2_ppl",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "cachemedic",
+        "value": 36.00195644979922,
+        "score": 0.027776268253487564
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "no_defense",
+        "value": 0.684,
+        "score": 0.684
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "reset_clear",
+        "value": 0.684,
+        "score": 0.684
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "smoothing",
+        "value": 0.684,
+        "score": 0.684
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "masking_dropout",
+        "value": 0.684,
+        "score": 0.684
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "clipping_renorm",
+        "value": 0.684,
+        "score": 0.684
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "cachemedic",
+        "value": 0.7,
+        "score": 0.7
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "no_defense",
+        "value": 0.696,
+        "score": 0.696
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "reset_clear",
+        "value": 0.72,
+        "score": 0.72
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "smoothing",
+        "value": 0.696,
+        "score": 0.696
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "masking_dropout",
+        "value": 0.716,
+        "score": 0.716
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "clipping_renorm",
+        "value": 0.64,
+        "score": 0.64
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "cachemedic",
+        "value": 0.704,
+        "score": 0.704
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "no_defense",
+        "value": 0.696,
+        "score": 0.696
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "reset_clear",
+        "value": 0.724,
+        "score": 0.724
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "smoothing",
+        "value": 0.7,
+        "score": 0.7
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "masking_dropout",
+        "value": 0.708,
+        "score": 0.708
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "clipping_renorm",
+        "value": 0.652,
+        "score": 0.652
+      },
+      {
+        "task": "sst2_prompted",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "cachemedic",
+        "value": 0.712,
+        "score": 0.712
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "no_defense",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "reset_clear",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "smoothing",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "masking_dropout",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "clipping_renorm",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.0,
+        "defense": "cachemedic",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "no_defense",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "reset_clear",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "smoothing",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "masking_dropout",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "clipping_renorm",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.08,
+        "defense": "cachemedic",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "no_defense",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "reset_clear",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "smoothing",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "masking_dropout",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "clipping_renorm",
+        "value": 0.0,
+        "score": 0.0
+      },
+      {
+        "task": "needle_long_context",
+        "corruption_type": "contiguous_overwrite",
+        "epsilon": 0.16,
+        "defense": "cachemedic",
+        "value": 0.0,
+        "score": 0.0
+      }
+    ],
+    "clean_metrics": {
+      "wikitext2_ppl": {
+        "no_defense": 35.72999852598916,
+        "reset_clear": 35.72999852598916,
+        "smoothing": 35.72999852598916,
+        "masking_dropout": 35.72999852598916,
+        "clipping_renorm": 35.72999852598916,
+        "cachemedic": 35.843320004804845
+      },
+      "sst2_prompted": {
+        "no_defense": 0.684,
+        "reset_clear": 0.684,
+        "smoothing": 0.684,
+        "masking_dropout": 0.684,
+        "clipping_renorm": 0.684,
+        "cachemedic": 0.7
+      },
+      "needle_long_context": {
+        "no_defense": 0.0,
+        "reset_clear": 0.0,
+        "smoothing": 0.0,
+        "masking_dropout": 0.0,
+        "clipping_renorm": 0.0,
+        "cachemedic": 0.0
+      }
+    },
+    "score_vs_eps": {
+      "eps": [
+        0.0,
+        0.08,
+        0.16
+      ],
+      "no_defense": [
+        0.23732922885767474,
+        0.2412798106853878,
+        0.24128535020927147
+      ],
+      "best_heuristic": [
+        0.23732922885767474,
+        0.24917984070351992,
+        0.2504904675836805
+      ],
+      "cachemedic": [
+        0.2426330670993084,
+        0.24391879475687342,
+        0.24659208941782917
+      ]
+    },
+    "best_heuristic_name": "reset_clear",
+    "heuristic_auc": {
+      "reset_clear": 0.039447175113935806,
+      "smoothing": 0.03849865754184696,
+      "masking_dropout": 0.03913196879146767,
+      "clipping_renorm": 0.036208579390223504
+    },
+    "robustness_auc": {
+      "no_defense": 0.038446968017508874,
+      "best_heuristic": 0.039447175113935806,
+      "cachemedic": 0.039082509841235374
+    },
+    "clean_regression": {
+      "no_defense": 0.23732922885767474,
+      "best_heuristic": 0.23732922885767474,
+      "cachemedic": 0.2426330670993084
+    },
+    "overhead": {
+      "no_defense": {
+        "tokens_per_sec": 2683.472682897927,
+        "wall_time_sec": 51.655454099985946,
+        "gpu_mem_gb": 0.7734055519104004
+      },
+      "best_heuristic": {
+        "tokens_per_sec": 2871.613746970675,
+        "wall_time_sec": 48.27111589998094,
+        "gpu_mem_gb": 0.7734055519104004
+      },
+      "cachemedic": {
+        "tokens_per_sec": 2785.2084406509052,
+        "wall_time_sec": 49.76862699999765,
+        "gpu_mem_gb": 0.7734055519104004
+      }
+    }
+  },
+  "settings": {
+    "tasks": [
+      {
+        "name": "wikitext2_ppl",
+        "num_examples": 400
+      },
+      {
+        "name": "sst2_prompted",
+        "num_examples": 250
+      },
+      {
+        "name": "needle_long_context",
+        "num_examples": 80
+      }
+    ],
+    "eps": [
+      0.0,
+      0.08,
+      0.16
+    ],
+    "types": [
+      "contiguous_overwrite"
+    ],
+    "ood_protocol": "loto_holdout_contiguous_overwrite",
+    "checkpoint_loaded": true
+  }
+}

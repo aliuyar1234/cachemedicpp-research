@@ -25,6 +25,8 @@ All randomness uses a dedicated \texttt{torch.Generator} seeded from the run see
 We write the masked tensor as $X_m = X \odot m$, where the mask $m$ is the broadcast product of the chosen layer/head/time masks.
 The bundled runs instantiate the operator parameters as follows (from \texttt{evidence/*/config\_resolved.yaml}):
 
+\begingroup
+\setlength{\itemsep}{2pt}
 \begin{itemize}
   \item \textbf{Gaussian noise (type \texttt{gaussian}).}
     $X \leftarrow X + m \odot \big(\varepsilon\cdot \mathrm{RMS}(X)\cdot \mathcal{N}(0,1)\big)$, with RMS computed per head and timestep and \texttt{gaussian\_scale\_by\_rms=true}.
@@ -40,11 +42,14 @@ The bundled runs instantiate the operator parameters as follows (from \texttt{ev
   \item \textbf{Contiguous overwrite (type \texttt{contiguous\_overwrite}).}
     Overwrite a fixed window of old cache positions (here \texttt{overwrite\_window=[16,48)}) with the corresponding window from a donor cache computed from a deterministic donor prompt string (provided in the resolved config). This corruption type is held out during training and used for OOD evaluation (LOTO).
 \end{itemize}
+\endgroup
 
 \subsection{Training pseudocode (one step)}
 \label{app:train_pseudocode}
 
 The following pseudocode matches the training objective in Sec.~3 and the harness implementation (teacher and student share frozen base weights):
+\begingroup
+\footnotesize
 \begin{verbatim}
 Inputs: prompts x, frozen base model f_theta, trainable repair operator R_phi
 Sample is_clean ~ Bernoulli(p_clean)
@@ -68,6 +73,7 @@ else:
 
 Backpropagate L into phi only; theta is frozen.
 \end{verbatim}
+\endgroup
 
 \subsection{Evaluation details}
 \label{app:eval_details}
@@ -94,29 +100,36 @@ Table~\ref{tab:per_task} reports raw per-task metrics for gpt2-medium at clean a
 
 \begin{table}[h]
   \centering
+  \small
   \caption{Per-task metrics for gpt2-medium. ``Best heuristic'' is smoothing in this evaluation protocol.}
   \label{tab:per_task}
-  \vspace{2pt}
+  \vspace{0pt}
   \input{tables/table_per_task_breakdown_medium.tex}
 \end{table}
 
 \subsection{Evidence map for all numeric claims}
 \label{app:evidence_map}
 
-All numeric claims in the main text are sourced from the following evidence files (paths relative to the bundle root):
+All numeric claims in the main text are sourced from these files (relative to the bundle root):
+\begingroup
+\footnotesize
+\ttfamily
+\begin{tabular}{@{}l@{}}
+evidence/gpt2\_medium\_contr/metrics/task\_metrics.json \\
+evidence/gpt2\_medium\_contr/metrics/stability\_metrics.json \\
+evidence/gpt2\_medium\_no\_contr/metrics/task\_metrics.json \\
+evidence/gpt2\_medium\_no\_contr/metrics/stability\_metrics.json \\
+evidence/gpt2\_large\_contr/metrics/task\_metrics.json
+\end{tabular}
+\endgroup
 
-\begin{verbatim}
-evidence/gpt2_medium_contr/metrics/task_metrics.json
-evidence/gpt2_medium_contr/metrics/stability_metrics.json
-evidence/gpt2_medium_no_contr/metrics/task_metrics.json
-evidence/gpt2_medium_no_contr/metrics/stability_metrics.json
-evidence/gpt2_large_contr/metrics/task_metrics.json
-\end{verbatim}
-
-The resolved configurations used by the harness are stored in:
-
-\begin{verbatim}
-evidence/gpt2_medium_contr/config_resolved.yaml
-evidence/gpt2_medium_no_contr/config_resolved.yaml
-evidence/gpt2_large_contr/config_resolved.yaml
-\end{verbatim}
+Resolved configurations used by the harness are:
+\begingroup
+\footnotesize
+\ttfamily
+\begin{tabular}{@{}l@{}}
+evidence/gpt2\_medium\_contr/config\_resolved.yaml \\
+evidence/gpt2\_medium\_no\_contr/config\_resolved.yaml \\
+evidence/gpt2\_large\_contr/config\_resolved.yaml
+\end{tabular}
+\endgroup
