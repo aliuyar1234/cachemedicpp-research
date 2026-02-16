@@ -1,11 +1,10 @@
 \section{Related Work}
 
-We position CacheMedic++ at the intersection of (i) KV-cache corruption and manipulation, (ii) KV-cache interventions for behavior control, and (iii) stability and internal editing methods.
+\paragraph{KV-cache corruption and manipulation.}
+Recent work has explored fault models and attacks that act directly on the transformer KV cache, including transformer memory corruption \cite{hossain2025mti}, cache-based attacks \cite{nahian2025cachetrap}, and history-swapping manipulations \cite{ganesh2025historyswap}. These directions motivate cache integrity as a robustness surface distinct from input perturbations or weight perturbations.
 
-\paragraph{KV-cache corruption and manipulation.} Prior work shows that perturbing cached keys/values can destabilize outputs or induce targeted behaviors without modifying model weights \cite{hossain2025mti,nahian2025cachetrap,ganesh2025historyswap}.
+\paragraph{State interventions and steering.}
+A broad line of work studies interventions on internal states for controlling model behavior. Conceptor steering \cite{conceptor2024} is one example of a state-based steering approach. CacheMedic++ is complementary: we focus on repairing corrupted KV-cache state to match the clean-cache behavior of a frozen model, rather than steering outputs toward a task-specific target.
 
-\paragraph{KV interventions and steering.} Several methods directly manipulate internal states for steering or defense objectives, motivating targeted interventions at inference time \cite{conceptor2024}.
-
-\paragraph{Stability and internal editing.} Activation-level constraints and editing techniques motivate framing internal state edits as operators with explicit stability properties \cite{sea2024,abd2025acl}.
-
-We differ by introducing a learned KV-specific repair operator with explicit contraction regularization and by treating stability metrics as primary results.
+\paragraph{Stability and activation editing.}
+SEA \cite{sea2024} proposes spectral editing of activations, and activation-boundary defense \cite{abd2025acl} proposes constraining activations to safeguard LLM behavior. CacheMedic++ differs by (i) operating specifically on the persistent KV cache used by attention, (ii) training a small operator via self-distillation against a clean-cache teacher under cache corruptions, and (iii) adding an explicit contraction regularizer and evaluating stability metrics (logit sensitivity and amplification maps) alongside task robustness.

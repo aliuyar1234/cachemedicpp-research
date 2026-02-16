@@ -1,39 +1,72 @@
 \section{Experiments}
 
-We evaluate CacheMedic++ on Wikitext-2 perplexity, SST-2 prompted classification, and a deterministic needle-style long-context check. We report robustness curves versus corruption severity and stability metrics.
+We report results on two frozen GPT-2 models (gpt2-medium and gpt2-large) using the harness protocols bundled with this paper.
+All reported numbers are computed from the accompanying evidence JSON files (see Appendix~\ref{app:evidence_map}).
 
-\paragraph{Setup.}
-Our primary model is gpt2-medium; second-model confirmation uses gpt2-large. The primary evaluation uses 400 Wikitext-2 examples, 250 SST-2 examples, and 80 long-context needle examples, with robustness scored as the mean of task scores (SST-2 accuracy, inverse perplexity for Wikitext-2, and needle accuracy).
+\subsection{Setup}
+\paragraph{Models.}
+We evaluate gpt2-medium as the primary model and gpt2-large as a second-model confirmation.
+Inference uses batch size 1, eager attention, and the standard KV cache.
 
-\paragraph{Primary-model outcome (gpt2-medium).}
-On the canonical tuned V-only run, CacheMedic++ improves both clean score and robustness AUC versus no defense and the best heuristic (Table~\ref{tab:main}): clean score rises from 0.2373 (no defense) and 0.2373 (best heuristic) to 0.2466, while robustness AUC rises from 0.0384 and 0.0390 to 0.0401.
+\paragraph{Tasks.}
+We evaluate on:
+(i) Wikitext-2 perplexity (400 examples),
+(ii) SST-2 prompted classification (250 examples),
+and (iii) a deterministic needle-style long-context probe (80 examples).
+Exact prompting and subset sizes are specified in Appendix~\ref{app:eval_details}.
 
-\paragraph{Contraction ablation (paired no\_contr).}
-Using the exact tuned pair, contraction improves robustness relative to the no-contraction ablation: robustness AUC increases from 0.0388 (no\_contr) to 0.0401 (contr), a +0.0013 absolute gain. Stability also improves relative to no\_contr with paired ratios 0.9291 at $\delta=1.0$ and 0.9266 at $\delta=2.0$. Clean WT2 regression remains small (+0.28\% PPL relative to no defense), staying inside the project clean-regression bound.
+\paragraph{OOD protocol and corruption.}
+We train CacheMedic++ on a fixed mixture of five corruption types and hold out \texttt{contiguous\_overwrite}.
+Evaluation is performed on the held-out \texttt{contiguous\_overwrite} type at $\varepsilon\in\{0,0.08,0.16\}$ (LOTO; Sec.~\ref{sec:threat}).
+For all runs, corruption applies only to the \texttt{old\_only} segment of the cache (all but the most recent 32 tokens), exposing long-range cache dependence.
 
-\paragraph{Interpretation.}
-The strongest claim supported by the paired evidence is that contraction improves the repaired model relative to the identical no-contraction setup. Absolute sensitivity versus the unmodified baseline remains a limitation and is reported transparently as part of the paper's scope.
+\paragraph{Baselines and ablations.}
+We compare against:
+\textbf{no defense} and four inference-only heuristics (reset/clear, smoothing, masking/dropout, clipping/renorm).
+We report \textbf{best heuristic} chosen by robustness AUC on the evaluation grid.
+To test the stability framing, we include a \textbf{paired contraction ablation}: the same repair operator and training setup with $\lambda_{\mathrm{contr}}$ set to 0.
 
-\paragraph{Second-model confirmation (gpt2-large).}
-The same operator family and training recipe transfer qualitatively to gpt2-large (Table~\ref{tab:second_model}): clean score improves from 0.2974 to 0.3001 and robustness AUC from 0.0472 to 0.0475.
+\subsection{Main results (gpt2-medium)}
+Table~\ref{tab:main} summarizes clean score and robustness AUC.
+CacheMedic++ improves both clean score and robustness AUC compared to no defense and the best heuristic baseline.
+Figure~\ref{fig:robustness} shows the full robustness curve.
 
 \begin{table}[t]
   \centering
-  \InputOrBox{tables/table_main_results.tex}
-  \caption{Main robustness and clean-score results on gpt2-medium.}
+  \caption{gpt2-medium results under OOD held-out \texttt{contiguous\_overwrite} (LOTO). Clean score is at $\varepsilon=0$; robustness AUC is trapezoidal area over $\varepsilon\in\{0,0.08,0.16\}$.}
   \label{tab:main}
+  \vspace{2pt}
+  \input{tables/table_main_results.tex}
 \end{table}
+
+\subsection{Paired contraction ablation}
+Table~\ref{tab:ablations} isolates the contraction regularizer by toggling only $\lambda_{\mathrm{contr}}$.
+Contraction improves robustness AUC and reduces logit sensitivity relative to the no-contraction variant at both $\delta=1$ and $\delta=2$.
+We stress that this paired comparison is the cleanest evidence that the stability term contributes beyond the distillation objective.
 
 \begin{table}[t]
   \centering
-  \InputOrBox{tables/table_ablation_summary.tex}
-  \caption{Paired ablation summary (no\_contr vs contr) for the tuned V-only setup.}
+  \caption{Paired contraction ablation on gpt2-medium (same operator and training setup; only $\lambda_{\mathrm{contr}}$ differs). ``Stability ratio'' is $\mathrm{Sens}_{\mathrm{contr}}(\delta)/\mathrm{Sens}_{\mathrm{no\ contr}}(\delta)$; values below 1 indicate improved stability.}
   \label{tab:ablations}
+  \vspace{2pt}
+  \input{tables/table_ablation_summary.tex}
 \end{table}
+
+\subsection{Second model: gpt2-large}
+Table~\ref{tab:second_model} reports the same evaluation protocol on gpt2-large.
+CacheMedic++ shows a smaller but consistent improvement in both clean score and robustness AUC.
 
 \begin{table}[t]
   \centering
-  \InputOrBox{tables/table_second_model_results.tex}
-  \caption{Second-model confirmation (gpt2-large) from the tuned V-only setup.}
+  \caption{Second-model confirmation on gpt2-large under the same OOD held-out \texttt{contiguous\_overwrite} protocol.}
   \label{tab:second_model}
+  \vspace{2pt}
+  \input{tables/table_second_model_results.tex}
 \end{table}
+
+\subsection{Stability behavior and the ``absolute stability'' limitation}
+Figure~\ref{fig:sens} reports logit sensitivity curves and includes the no-contraction ablation.
+Contraction reduces sensitivity relative to the no-contraction variant (Table~\ref{tab:ablations}), but \textbf{absolute sensitivity relative to the unmodified baseline remains higher} in this setting.
+We therefore frame CacheMedic++ primarily as a \emph{relative stabilization} method whose strongest evidence comes from paired ablations, robustness/clean tradeoffs, and second-model transfer rather than absolute stability improvements over the unmodified model.
+
+Figure~\ref{fig:amp} further visualizes that amplification differences are concentrated in the protected layers (10--11), consistent with the operator being active only in that layer subset.

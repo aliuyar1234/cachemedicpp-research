@@ -1,28 +1,80 @@
-\section{Method: CacheMedic++}
+\section{CacheMedic++}
 
-CacheMedic++ inserts a small operator $R_\phi$ inside attention. After past KV concatenation, we optionally apply corruption and then repair:
-\[
-(K, V) \xrightarrow{C} (K_{corr}, V_{corr}) \xrightarrow{R_\phi} (K_{hat}, V_{hat})
-\]
-Attention logits are computed from $q$ and $K_{hat}$. Base model weights are frozen; only $\phi$ is trained.
+CacheMedic++ adds a small stability operator $R_\phi$ that repairs the KV cache \emph{inside} the attention computation.
+The base model weights $\theta$ are frozen; only $\phi$ is trained.
 
-We implement three repair families (A/B/C) and use Option A by default. The tuned configuration in this paper is V-only repair with rank 4 over two protected layers.
+\subsection{Insertion point inside attention}
+Consider one attention layer. Let $K_{\mathrm{full}},V_{\mathrm{full}}$ denote the concatenation of past and current-step keys/values.
+We (optionally) apply a cache corruption $C$ to obtain $(K_{\mathrm{corr}},V_{\mathrm{corr}})=C(K_{\mathrm{full}},V_{\mathrm{full}})$.
+We then apply the repair operator before attention logits are computed:
+\[
+  (K_{\mathrm{hat}},V_{\mathrm{hat}}) = R_\phi(q, K_{\mathrm{corr}}, V_{\mathrm{corr}}),
+\]
+and compute attention using $K_{\mathrm{hat}},V_{\mathrm{hat}}$.
+In our canonical runs, $R_\phi$ is applied only on a small set of protected layers $\mathcal{L}_{\mathrm{prot}}$ and is the identity elsewhere.
 
-\paragraph{Training objective.}
-For each batch, we combine a distillation objective with clean-state identity and a contraction term on corrupted states:
+\subsection{Repair operator family (Option A, used in results)}
+We use Option A from the harness: a \textbf{query-conditioned low-rank additive} correction.
+Parameters are shared across heads by default.
+For a protected layer, let $r$ be the rank and $d$ the head dimension.
+Let $V \in \mathbb{R}^{1\times H\times T\times d}$ and $q \in \mathbb{R}^{1\times H\times d}$ be the per-head query for the current step.
+We learn projection matrices $W_v,U_v \in \mathbb{R}^{d\times r}$ and a gating network $g_\phi$ that outputs $\alpha = g_\phi(q)\in (0,1)^{1\times H\times r}$.
+We compute:
 \[
-\mathcal{L} = \mathcal{L}_{KD} + \lambda_{id}\mathcal{L}_{id} + \lambda_{contr}\mathcal{L}_{contr}.
+  C = V W_v \in \mathbb{R}^{1\times H\times T\times r}, \qquad
+  \Delta V = (C \odot \alpha[:, :, \mathrm{None}, :]) U_v^\top,
 \]
-The contraction term penalizes repaired states that remain far from the clean reference:
+and set $V_{\mathrm{hat}} = V + \Delta V$.
+The same form applies to keys if \texttt{apply\_to} includes $K$; our tuned configuration uses \texttt{apply\_to=V} with rank $r{=}4$ on two mid-to-late layers (Appendix~\ref{app:configs}).
+
+\subsection{Training objective: KD + identity + contraction}
+CacheMedic++ is trained by self-distillation with a clean teacher.
+For each training step, we sample either a \textbf{clean} batch with probability $p_{\mathrm{clean}}$ (no corruption) or a \textbf{corrupted} batch from the corruption mixture otherwise.
+Let $z_{\mathrm{clean}}$ be the next-token logits from the frozen teacher with a clean cache, and let $z_{\mathrm{rep}}$ be logits from the same frozen model when the cache is corrupted and then repaired.
+
+\paragraph{KD loss.}
+With temperature $T$:
 \[
-\rho_l = \frac{\lVert S^{(l)}_{rep} - S^{(l)}_{clean} \rVert_F}{\lVert S^{(l)}_{corr} - S^{(l)}_{clean} \rVert_F + \epsilon_0}, \qquad
-\mathcal{L}_{contr} = \frac{1}{|L|}\sum_{l \in L}\max(0,\rho_l - \alpha)^2.
+  p = \mathrm{softmax}(z_{\mathrm{clean}}/T),\quad q = \mathrm{softmax}(z_{\mathrm{rep}}/T),\quad
+  \mathcal{L}_{\mathrm{KD}} = \mathrm{KL}(p \,\|\, q).
 \]
-In the tuned run we use $\lambda_{id}=4.0$, $\lambda_{contr}=3.0$, and clean-batch probability $0.45$.
+
+\paragraph{Identity regularizer.}
+On clean batches (corruption disabled), we penalize deviation from identity on protected layers:
+\[
+  \mathcal{L}_{\mathrm{id}} = \sum_{l\in\mathcal{L}_{\mathrm{prot}}}
+  \frac{\|K_{\mathrm{hat}}^{(l)}-K_{\mathrm{clean}}^{(l)}\|_F^2 + \|V_{\mathrm{hat}}^{(l)}-V_{\mathrm{clean}}^{(l)}\|_F^2}
+       {\|K_{\mathrm{clean}}^{(l)}\|_F^2 + \|V_{\mathrm{clean}}^{(l)}\|_F^2 + \epsilon_0}.
+\]
+
+We use $\epsilon_0=10^{-8}$ in denominators for numerical stability.
+
+\paragraph{Contraction regularizer.}
+On corrupted batches, we encourage repair to \emph{contract} the corrupted cache toward the clean cache.
+Define per-layer error tensors
+$\Delta K^{(l)} = K_{\mathrm{corr}}^{(l)}-K_{\mathrm{clean}}^{(l)}$ and
+$\Delta V^{(l)} = V_{\mathrm{corr}}^{(l)}-V_{\mathrm{clean}}^{(l)}$, and similarly
+$\Delta K_{\mathrm{rep}}^{(l)} = K_{\mathrm{hat}}^{(l)}-K_{\mathrm{clean}}^{(l)}$ and
+$\Delta V_{\mathrm{rep}}^{(l)} = V_{\mathrm{hat}}^{(l)}-V_{\mathrm{clean}}^{(l)}$.
+We use the contraction ratio
+\[
+  \rho(l)=\frac{\|\Delta K_{\mathrm{rep}}^{(l)}\|_F + \|\Delta V_{\mathrm{rep}}^{(l)}\|_F}
+               {\|\Delta K^{(l)}\|_F + \|\Delta V^{(l)}\|_F + \epsilon_0},
+\]
+and a hinge penalty toward a target $\alpha_{\mathrm{contr}}$:
+\[
+  \mathcal{L}_{\mathrm{contr}} = \sum_{l\in\mathcal{L}_{\mathrm{prot}}} \max(0, \rho(l)-\alpha_{\mathrm{contr}})^2.
+\]
+
+\paragraph{Total loss.}
+\[
+  \mathcal{L} = \mathcal{L}_{\mathrm{KD}} + \lambda_{\mathrm{id}} \mathcal{L}_{\mathrm{id}} + \lambda_{\mathrm{contr}} \mathcal{L}_{\mathrm{contr}}.
+\]
+Our tuned run uses $T{=}2.0$, $p_{\mathrm{clean}}{=}0.45$, $\lambda_{\mathrm{id}}{=}4.0$, $\lambda_{\mathrm{contr}}{=}3.0$, $\alpha_{\mathrm{contr}}{=}0.75$, with frozen base weights.
 
 \begin{figure}[t]
   \centering
   \FigOrBox[width=0.95\linewidth]{figures/figB_clean_vs_overhead_pareto.png}
-  \caption{Clean regression vs overhead tradeoff for repair operator sweeps.}
-  \label{fig:pareto}
+  \caption{\textbf{Clean-score / throughput tradeoff} on gpt2-medium. We measure decoding throughput (tokens/sec) on the same evaluation setting used for Table~\ref{tab:main}. CacheMedic++ preserves most of the baseline throughput while improving clean score.}
+  \label{fig:overhead}
 \end{figure}

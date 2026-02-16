@@ -1,14 +1,122 @@
 \appendix
-\section{Appendix: Protocol Details}
 
-\subsection{Corruption operators}
-The corruption family contains six deterministic operator types (Gaussian, dropout/zeroing, orthogonal rotation, sparse bitflip-like, quantization noise, contiguous overwrite), combined with masks over layer/head/time axes and severity $\epsilon \in \{0.0,0.08,0.16\}$.
+\section{Appendix}
 
-\subsection{Operator families}
-Operator families A/B/C are implemented in the harness. This paper reports the tuned Option A setting with V-only repair, rank 4, and two protected layers.
+This appendix makes the paper self-sufficient and ties every quantitative claim to an evidence file contained in the bundle.
 
-\subsection{Training objective}
-Training minimizes $\mathcal{L}_{KD} + \lambda_{id}\mathcal{L}_{id} + \lambda_{contr}\mathcal{L}_{contr}$ with frozen base-model weights. The paired ablation toggles only $\lambda_{contr}$ (3.0 vs 0.0).
+\subsection{Canonical configurations}
+\label{app:configs}
 
-\subsection{Stability metrics}
-Stability is measured with finite-difference perturbations at $\delta \in \{0.0,1.0,2.0\}$ using top-$k=512$ logits, 60 prompts, and 4 perturbation directions per prompt.
+All reported results use repair family A (query-conditioned low-rank additive correction) with \texttt{apply\_to=V}, rank $r{=}4$, and protected layers $\mathcal{L}_{\mathrm{prot}}=\{10,11\}$.
+The base GPT-2 weights are frozen.
+Training uses 2500 steps with batch size 1 and prefix length 80.
+Key hyperparameters for the gpt2-medium tuned run are:
+temperature $T{=}2.0$, $p_{\mathrm{clean}}{=}0.45$, $\lambda_{\mathrm{id}}{=}4.0$, $\lambda_{\mathrm{contr}}{=}3.0$, $\alpha_{\mathrm{contr}}{=}0.75$.
+The exact resolved configs are stored in:
+\texttt{evidence/gpt2\_medium\_contr/config\_resolved.yaml} and
+\texttt{evidence/gpt2\_medium\_no\_contr/config\_resolved.yaml}, and analogously for gpt2-large.
+
+\subsection{Corruption operators (deterministic spec)}
+\label{app:corruptions}
+
+Corruptions act on cached $K,V$ tensors with shape $[1,H,T,d]$ and are applied under deterministic layer/head/time masks (Sec.~\ref{sec:threat}).
+All randomness uses a dedicated \texttt{torch.Generator} seeded from the run seed so that corruptions are exactly reproducible.
+
+We write the masked tensor as $X_m = X \odot m$, where the mask $m$ is the broadcast product of the chosen layer/head/time masks.
+The bundled runs instantiate the operator parameters as follows (from \texttt{evidence/*/config\_resolved.yaml}):
+
+\begin{itemize}
+  \item \textbf{Gaussian noise (type \texttt{gaussian}).}
+    $X \leftarrow X + m \odot \big(\varepsilon\cdot \mathrm{RMS}(X)\cdot \mathcal{N}(0,1)\big)$, with RMS computed per head and timestep and \texttt{gaussian\_scale\_by\_rms=true}.
+  \item \textbf{Dropout/zeroing (type \texttt{dropout\_zero}).}
+    Elementwise set $X_m$ to zero with probability $p$ (here $p{=}0.02$), leaving unmasked elements unchanged.
+  \item \textbf{Orthogonal rotation (type \texttt{orthogonal\_rotation}).}
+    Apply $X_m \leftarrow X_m R$ on the feature dimension, where $R\in\mathbb{R}^{d\times d}$ is orthogonal and generated via QR factorization from a fixed seed (here \texttt{rotation\_seed=999}); unmasked elements are unchanged.
+  \item \textbf{Sparse bitflip-ish faults (type \texttt{bitflipish\_sparse}).}
+    With probability $p$ per element (here $p{=}0.0005$), either flip sign $x\leftarrow -x$ or apply a signed ``jump''
+    $x\leftarrow x + \mathrm{sign}(\eta)\cdot \varepsilon_{\mathrm{jump}}\cdot \max(|x|,10^{-3})$ (here $\varepsilon_{\mathrm{jump}}{=}8.0$), where $\eta\sim\mathcal{N}(0,1)$.
+  \item \textbf{Quantization noise (type \texttt{quant\_noise}).}
+    Simulate symmetric $n$-bit de/quant (here $n{=}8$) with per-head scaling: $X_m$ is mapped to integers in $[-2^{n-1}{+}1,2^{n-1}{-}1]$ and dequantized back to float; unmasked elements are unchanged.
+  \item \textbf{Contiguous overwrite (type \texttt{contiguous\_overwrite}).}
+    Overwrite a fixed window of old cache positions (here \texttt{overwrite\_window=[16,48)}) with the corresponding window from a donor cache computed from a deterministic donor prompt string (provided in the resolved config). This corruption type is held out during training and used for OOD evaluation (LOTO).
+\end{itemize}
+
+\subsection{Training pseudocode (one step)}
+\label{app:train_pseudocode}
+
+The following pseudocode matches the training objective in Sec.~3 and the harness implementation (teacher and student share frozen base weights):
+\begin{verbatim}
+Inputs: prompts x, frozen base model f_theta, trainable repair operator R_phi
+Sample is_clean ~ Bernoulli(p_clean)
+
+Run teacher with clean cache:
+  z_clean, (K_clean, V_clean) = f_theta(x)
+
+if is_clean:
+  # no corruption; repair should be identity
+  (K_hat, V_hat) = R_phi(q, K_clean, V_clean)        # protected layers only
+  z_rep = f_theta.forward_with_cache(K_hat, V_hat)
+  L = KL(softmax(z_clean/T) || softmax(z_rep/T))
+  L += lambda_id * L_id(K_hat,V_hat; K_clean,V_clean)
+
+else:
+  (K_corr, V_corr) = C(K_clean, V_clean)             # sample type/params from Pi
+  (K_hat, V_hat) = R_phi(q, K_corr, V_corr)
+  z_rep = f_theta.forward_with_cache(K_hat, V_hat)
+  L = KL(softmax(z_clean/T) || softmax(z_rep/T))
+  L += lambda_contr * L_contr(K_hat,V_hat; K_clean,V_clean, K_corr,V_corr)
+
+Backpropagate L into phi only; theta is frozen.
+\end{verbatim}
+
+\subsection{Evaluation details}
+\label{app:eval_details}
+
+\paragraph{SST-2 prompted classification.}
+We compute label log-probabilities for the tokens corresponding to the labels \texttt{"negative"} and \texttt{"positive"} under the prompt template:
+\begin{quote}\ttfamily
+Review: <text>
+Sentiment:
+\end{quote}
+Accuracy is computed over 250 examples (see \texttt{evidence/*/config\_resolved.yaml}).
+
+\paragraph{Needle long-context probe.}
+We generate a deterministic long context with a planted key/value pair and query for the key.
+The generator settings in the canonical run are:
+context length 2048, needle token \texttt{the\_key}, needle value \texttt{violet-7}, insert position fraction 0.35, and question template
+\texttt{"Question: What is {needle\_token}? Answer:"}.
+In the bundled runs, all methods obtain 0 accuracy on this probe (Table~\ref{tab:per_task}), so the aggregate robustness score is driven by WT2 and SST-2.
+
+\subsection{Per-task breakdown (gpt2-medium)}
+\label{app:per_task}
+
+Table~\ref{tab:per_task} reports raw per-task metrics for gpt2-medium at clean and at the largest evaluated corruption severity ($\varepsilon{=}0.16$) for the OOD held-out \texttt{contiguous\_overwrite} corruption.
+
+\begin{table}[h]
+  \centering
+  \caption{Per-task metrics for gpt2-medium. ``Best heuristic'' is smoothing in this evaluation protocol.}
+  \label{tab:per_task}
+  \vspace{2pt}
+  \input{tables/table_per_task_breakdown_medium.tex}
+\end{table}
+
+\subsection{Evidence map for all numeric claims}
+\label{app:evidence_map}
+
+All numeric claims in the main text are sourced from the following evidence files (paths relative to the bundle root):
+
+\begin{verbatim}
+evidence/gpt2_medium_contr/metrics/task_metrics.json
+evidence/gpt2_medium_contr/metrics/stability_metrics.json
+evidence/gpt2_medium_no_contr/metrics/task_metrics.json
+evidence/gpt2_medium_no_contr/metrics/stability_metrics.json
+evidence/gpt2_large_contr/metrics/task_metrics.json
+\end{verbatim}
+
+The resolved configurations used by the harness are stored in:
+
+\begin{verbatim}
+evidence/gpt2_medium_contr/config_resolved.yaml
+evidence/gpt2_medium_no_contr/config_resolved.yaml
+evidence/gpt2_large_contr/config_resolved.yaml
+\end{verbatim}

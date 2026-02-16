@@ -1,5 +1,14 @@
-\section{Limitations and Ethics}
+\section{Limitations and Ethical Considerations}
 
-This work evaluates stability under a reproducible set of corruption operators. Real-world faults may differ in distribution and timing. The method assumes access to model internals to insert the repair operator.
+\paragraph{Limitations.}
+\begin{itemize}
+  \item \textbf{Absolute stability is not the central win.} In our stability measurements, CacheMedic++ does not consistently reduce \emph{absolute} logit sensitivity compared to the unmodified baseline (Fig.~\ref{fig:sens}). Our strongest evidence is (i) the paired contraction-vs-no-contraction ablation (Table~\ref{tab:ablations}), (ii) robustness/clean tradeoffs (Table~\ref{tab:main}), and (iii) second-model qualitative transfer (Table~\ref{tab:second_model}).
+  \item \textbf{Simulated fault model.} Our corruption operators are deterministic simulations of cache perturbations; they are not direct measurements of hardware faults or real-world adversaries. Generalization to other fault distributions is an open question.
+  \item \textbf{Scope of models and implementations.} The bundled evidence covers GPT-2 models with batch size 1 and eager attention. We do not evaluate flash attention implementations or larger LLMs.
+  \item \textbf{Task coverage.} The needle-style long-context probe yields zero accuracy for all methods in the bundled runs; thus improvements in the aggregate score are driven by the other tasks (Appendix~\ref{app:eval_details}).
+\end{itemize}
 
-We treat the work as defensive robustness research. The harness avoids distributing exploit automation beyond minimal corruption operators required for evaluation.
+\paragraph{Ethical considerations.}
+This work studies how cache corruption affects model outputs and proposes a defensive repair mechanism.
+While our threat model includes targeted cache manipulations, we focus on reproducible perturbations that enable evaluation, and we report limitations in absolute stability.
+We do not claim a security guarantee; deploying defenses in adversarial settings requires broader threat modeling and auditing.

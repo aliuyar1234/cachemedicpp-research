@@ -33,7 +33,7 @@
 \maketitle
 
 \begin{abstract}
-Large language models rely on the key--value (KV) cache for efficient autoregressive inference, but this persistent internal state is vulnerable to corruption that can induce large output drift without changing prompts or weights. We propose CacheMedic++, a lightweight in-attention KV repair operator trained with frozen base model weights using self-distillation, clean-state identity regularization, and a contraction objective on corrupted states. On our canonical gpt2-medium setting, CacheMedic++ improves clean score from 0.2373 to 0.2466 and robustness AUC from 0.0390 (best heuristic) to 0.0401. In paired ablations, adding contraction improves robustness AUC from 0.0388 to 0.0401 and reduces logit sensitivity to 92.91\% ($\delta=1.0$) and 92.66\% ($\delta=2.0$) of the no-contraction variant. The same operator family transfers qualitatively to gpt2-large, improving clean score from 0.2974 to 0.3001 and robustness AUC from 0.0472 to 0.0475.
+Large language models rely on the key--value (KV) cache for efficient autoregressive inference, but this persistent internal state is vulnerable to corruption that can induce output drift without changing prompts or weights. We propose CacheMedic++, a lightweight in-attention KV repair operator trained with frozen base model weights using self-distillation, clean-state identity regularization, and a contraction objective on corrupted states. On our canonical gpt2-medium setting, CacheMedic++ improves clean score from 0.2373 to 0.2466 and robustness AUC from 0.0390 (best heuristic) to 0.0401. In paired ablations, adding contraction improves robustness AUC from 0.0388 to 0.0401 and reduces logit sensitivity to 92.91\% ($\delta=1.0$) and 92.66\% ($\delta=2.0$) of the no-contraction variant. The same operator family transfers qualitatively to gpt2-large, improving clean score from 0.2974 to 0.3001 and robustness AUC from 0.0472 to 0.0475. We emphasize paired contraction ablations and robustness/clean tradeoffs as primary evidence, since absolute stability versus the unmodified baseline is not the central win in this setting.
 \end{abstract}
 
 \InputOrBox{sections/01_introduction.tex}
@@ -44,8 +44,7 @@ Large language models rely on the key--value (KV) cache for efficient autoregres
 \InputOrBox{sections/06_related_work.tex}
 \InputOrBox{sections/07_limitations_ethics.tex}
 
-\bibliographystyle{plain}
-\bibliography{refs}
+\input{bibliography.tex}
 
 \clearpage
 \InputOrBox{appendix.tex}

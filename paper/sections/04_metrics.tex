@@ -1,31 +1,60 @@
-\section{Stability Metrics}
+\section{Evaluation Metrics}
 
-We treat stability as a measurable object and report two primary metrics.
+CacheMedic++ reports both task robustness and stability metrics as primary outputs.
 
-\paragraph{Logit sensitivity.} We estimate expected next-token logit drift under finite-difference perturbations of the KV state:
+\subsection{Task robustness score and robustness AUC}
+We evaluate three tasks: Wikitext-2 perplexity (WT2 PPL), SST-2 prompted classification (accuracy), and a deterministic needle-style long-context probe (accuracy).
+To aggregate heterogeneous tasks into a single robustness score, we map each task metric to a \emph{score} $s \in [0,1]$:
+for WT2 we use $s_{\mathrm{WT2}} = 1/\mathrm{PPL}$, and for SST-2 and needle we use accuracy.
+The overall score is the mean across tasks:
 \[
-\mathrm{Sens}(\delta)=\mathbb{E}_{p,d}\left[\left\|z_{\mathrm{top}k}\!\left(S+\delta d\right)-z_{\mathrm{top}k}(S)\right\|_2\right],
+  \mathrm{Score}(\varepsilon) = \frac{1}{|\mathcal{T}|}\sum_{\tau\in\mathcal{T}} s_\tau(\varepsilon).
 \]
-where $p$ indexes prompts, $d$ is a normalized perturbation direction, and $z_{\mathrm{top}k}$ selects top-$k$ logits at the measurement token.
 
-\paragraph{Amplification maps.} We estimate layer/head-local gain factors
+For a fixed corruption type and a grid of severities $\{\varepsilon_0,\dots,\varepsilon_n\}$, we produce a \textbf{robustness curve} $\mathrm{Score}(\varepsilon)$.
+We summarize it by the trapezoidal area under the curve:
 \[
-\gamma(l,h)=\frac{\|\Delta z\|_2}{\|\Delta S_{l,h}\|_F}
+  \mathrm{AUC} = \mathrm{trapz}\big(\mathrm{Score}(\varepsilon), \varepsilon\big).
 \]
-by injecting perturbations into one layer/head at a time and measuring induced logit drift.
+We report:
+(i) \textbf{clean score} $\mathrm{Score}(0)$,
+and (ii) \textbf{robustness AUC} over the evaluation severity grid (Table~\ref{tab:main}).
 
-Our default stability settings are $\delta \in \{0.0,1.0,2.0\}$, top-$k=512$, 60 prompts, and 4 perturbation directions per prompt.
+\paragraph{Best heuristic baseline.}
+We evaluate four inference-only heuristics from the harness (reset/clear, smoothing, masking/dropout, clipping/renorm).
+To avoid cherry-picking, we select \emph{best heuristic} as the heuristic with the highest robustness AUC on the evaluation grid, and report that method alongside no defense and CacheMedic++.
+
+\subsection{Stability metrics: logit sensitivity and amplification maps}
+\paragraph{Logit sensitivity.}
+We measure finite-difference logit drift under \emph{cache-state perturbations} at magnitudes $\delta \in \{0,1,2\}$.
+Let $S$ denote the clean protected cache state for a prompt, and let $\Delta$ be a random perturbation tensor with the same structure as $S$, scaled by per-layer RMS so that its norm matches the requested $\delta$.
+Let $z(\cdot)$ be the next-token logits.
+We define sensitivity:
+\[
+  \mathrm{Sens}(\delta) = \mathbb{E}_{x,\Delta}\big[\|z(S+\Delta)-z(S)\|_2\big],
+\]
+and the repaired version uses logits after applying $R_\phi$ to $S+\Delta$.
+To control cost, we compute $\|\cdot\|_2$ over the top-$k$ logits of $z(S)$ (here $k{=}512$), using 60 prompts and 4 directions per prompt.
+
+\paragraph{Amplification maps.}
+We estimate which layer/head pairs amplify KV perturbations into output drift.
+For each layer $l$ and head $h$, we inject a perturbation that is nonzero only in $(l,h)$ and measure the median drift normalized by perturbation magnitude:
+\[
+  \gamma(l,h) = \mathrm{median}_{x,\Delta}\left[\frac{\|z(S+\Delta_{l,h})-z(S)\|_2}{\|\Delta_{l,h}\|_F+\epsilon_0}\right],
+\]
+where $\epsilon_0$ is a small constant (we use $\epsilon_0=10^{-8}$).
+We report $\gamma(l,h)$ for selected layers/heads and visualize differences (Fig.~\ref{fig:amp}).
 
 \begin{figure}[t]
   \centering
   \FigOrBox[width=0.95\linewidth]{figures/figC_logit_sensitivity.png}
-  \caption{Logit sensitivity curves as a function of perturbation magnitude.}
+  \caption{\textbf{Logit sensitivity curves} on gpt2-medium. Contraction reduces sensitivity relative to the paired no-contraction variant, while absolute sensitivity relative to the unmodified baseline remains a limitation in this setting.}
   \label{fig:sens}
 \end{figure}
 
 \begin{figure}[t]
   \centering
   \FigOrBox[width=0.95\linewidth]{figures/figD_amplification_map.png}
-  \caption{Amplification map heatmap $\gamma(l,h)$ before and after repair.}
+  \caption{\textbf{Layer/head amplification differences} on gpt2-medium. Shown is $\Delta\gamma(l,h) = \gamma_{\mathrm{CacheMedic++}}(l,h)-\gamma_{\mathrm{no\ defense}}(l,h)$ over layers 8--11 and heads 0--15. In this configuration, amplification increases are concentrated in the protected layers (10--11), aligning with the ``absolute stability'' limitation noted in the main text.}
   \label{fig:amp}
 \end{figure}

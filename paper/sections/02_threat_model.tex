@@ -1,5 +1,36 @@
 \section{Threat and Fault Model}
+\label{sec:threat}
 
-We define a corruption family $C$ that perturbs the KV cache during inference. Corruption types are: Gaussian noise, dropout/zeroing, orthogonal rotations, sparse bitflip-like sign/jump perturbations, quantization noise, and contiguous overwrite of a cached segment. Corruptions are applied through deterministic masks over layer, head, and time axes.
+We define a deterministic family of cache corruptions $C$ that perturbs the KV cache during decoding.
+Throughout, we assume batch size $B{=}1$ and eager attention. For each transformer layer $l$, the (past) cache tensors are
+$K^{(l)},V^{(l)} \in \mathbb{R}^{1 \times H \times T \times d}$, where $H$ is the number of heads, $T$ is the number of cached timesteps, and $d$ is the head dimension.
+We call the set of protected layers $\mathcal{L}_{\mathrm{prot}}$; the protected state is $S = \{(K^{(l)},V^{(l)}) : l \in \mathcal{L}_{\mathrm{prot}}\}$.
 
-For evaluation we use $\epsilon \in \{0.0, 0.08, 0.16\}$ and report robustness curves across this grid. Our out-of-distribution (OOD) protocol is leave-one-type-out (LOTO): the holdout type is contiguous overwrite, excluded from training corruption mixtures and used for OOD evaluation.
+\subsection{Axis masks (layer/head/time)}
+Each corruption is applied under three deterministic binary masks:
+a layer mask $m_\ell(l)$, a head mask $m_h(h)$, and a time mask $m_t(t)$.
+Mask sampling uses a dedicated \texttt{torch.Generator} seeded from the run seed, so that the corruption is exactly reproducible.
+The time mask supports three modes:
+\texttt{all\_past} (corrupt all cached timesteps),
+\texttt{old\_only} (corrupt only timesteps $t < T - N_{\mathrm{recent}}$),
+and \texttt{window} (corrupt a contiguous window $[a,b)$).
+Our canonical runs use \texttt{old\_only} with $N_{\mathrm{recent}}{=}32$ and corrupt heads with Bernoulli($p_h{=}0.25$).
+
+\subsection{Corruption operators}
+Corruptions are implemented with torch-only operations and are deterministic given the seed and parameters.
+We include six operator types:
+\begin{enumerate}
+  \item \textbf{Gaussian noise} (scaled by per-vector RMS),
+  \item \textbf{Dropout/zeroing} (elementwise zero under the mask),
+  \item \textbf{Orthogonal rotation} on the feature dimension (QR-derived orthogonal matrix with fixed seed),
+  \item \textbf{Sparse bitflip-ish faults} (random sign flips and magnitude ``jumps'' in float space),
+  \item \textbf{Quantization noise} (simulate symmetric $n$-bit de/quant),
+  \item \textbf{Contiguous overwrite} (overwrite a past window of KV with a donor cache computed from a deterministic donor prompt).
+\end{enumerate}
+Precise pseudocode (including determinism rules) is given in Appendix~\ref{app:corruptions}.
+
+\subsection{Mixtures and OOD leave-one-type-out (LOTO)}
+A corruption run samples a type and parameters from a fixed mixture $\Pi$ and samples severities from an $\varepsilon$-grid.
+To test robustness generalization, we follow a leave-one-type-out protocol:
+we \textbf{exclude} \texttt{contiguous\_overwrite} from the training corruption mixture and evaluate on the held-out \texttt{contiguous\_overwrite} type for $\varepsilon \in \{0.0,0.08,0.16\}$.
+This isolates whether a learned repair operator trained on other cache faults can generalize to an unseen cache manipulation.
