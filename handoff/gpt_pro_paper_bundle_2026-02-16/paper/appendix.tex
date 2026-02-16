@@ -1,0 +1,14 @@
+\appendix
+\section{Appendix: Protocol Details}
+
+\subsection{Corruption operators}
+The corruption family contains six deterministic operator types (Gaussian, dropout/zeroing, orthogonal rotation, sparse bitflip-like, quantization noise, contiguous overwrite), combined with masks over layer/head/time axes and severity $\epsilon \in \{0.0,0.08,0.16\}$.
+
+\subsection{Operator families}
+Operator families A/B/C are implemented in the harness. This paper reports the tuned Option A setting with V-only repair, rank 4, and two protected layers.
+
+\subsection{Training objective}
+Training minimizes $\mathcal{L}_{KD} + \lambda_{id}\mathcal{L}_{id} + \lambda_{contr}\mathcal{L}_{contr}$ with frozen base-model weights. The paired ablation toggles only $\lambda_{contr}$ (3.0 vs 0.0).
+
+\subsection{Stability metrics}
+Stability is measured with finite-difference perturbations at $\delta \in \{0.0,1.0,2.0\}$ using top-$k=512$ logits, 60 prompts, and 4 perturbation directions per prompt.

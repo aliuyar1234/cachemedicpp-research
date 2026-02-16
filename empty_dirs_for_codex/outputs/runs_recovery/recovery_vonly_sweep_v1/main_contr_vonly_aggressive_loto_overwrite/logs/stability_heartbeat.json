@@ -1,0 +1,15 @@
+{
+  "phase": "stability",
+  "run_id": "main_contr_vonly_aggressive_loto_overwrite",
+  "timestamp_utc": "2026-02-16T15:19:37+00:00",
+  "status": "completed",
+  "reason": "completed",
+  "step": 7,
+  "total_steps": 7,
+  "progress": 1.0,
+  "steps_remaining": 0,
+  "elapsed_wall_sec": 380.91386010000133,
+  "eta_sec": 0.0,
+  "steps_per_sec": 0.018376858217136784,
+  "resumed_from": null
+}

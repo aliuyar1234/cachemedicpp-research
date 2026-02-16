@@ -1,0 +1,31 @@
+=E:\Model\huggingface : Die Benennung "=E:\Model\huggingface" wurde nicht als Name eines Cmdlet, einer Funktion, einer 
+Skriptdatei oder eines ausfÅhrbaren Programms erkannt. öberprÅfen Sie die Schreibweise des Namens, oder ob der Pfad 
+korrekt ist (sofern enthalten), und wiederholen Sie den Vorgang.
+In Zeile:1 Zeichen:1
++ ='E:\Model\huggingface'; ='E:\Model\huggingface\hub'; ='E:\Model\hugg ...
++ ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (=E:\Model\huggingface:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+=E:\Model\huggingface\hub : Die Benennung "=E:\Model\huggingface\hub" wurde nicht als Name eines Cmdlet, einer 
+Funktion, einer Skriptdatei oder eines ausfÅhrbaren Programms erkannt. öberprÅfen Sie die Schreibweise des Namens, 
+oder ob der Pfad korrekt ist (sofern enthalten), und wiederholen Sie den Vorgang.
+In Zeile:1 Zeichen:26
++ ='E:\Model\huggingface'; ='E:\Model\huggingface\hub'; ='E:\Model\hugg ...
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (=E:\Model\huggingface\hub:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+=E:\Model\huggingface\hub : Die Benennung "=E:\Model\huggingface\hub" wurde nicht als Name eines Cmdlet, einer 
+Funktion, einer Skriptdatei oder eines ausfÅhrbaren Programms erkannt. öberprÅfen Sie die Schreibweise des Namens, 
+oder ob der Pfad korrekt ist (sofern enthalten), und wiederholen Sie den Vorgang.
+In Zeile:1 Zeichen:55
++ ... ce'; ='E:\Model\huggingface\hub'; ='E:\Model\huggingface\hub'; python ...
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (=E:\Model\huggingface\hub:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+C:\Users\User\AppData\Roaming\Python\Python312\site-packages\triton\windows_utils.py:404: UserWarning: Failed to find CUDA.
+  warnings.warn("Failed to find CUDA.")
+W0215 18:47:32.575000 28832 torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+`torch_dtype` is deprecated! Use `dtype` instead!

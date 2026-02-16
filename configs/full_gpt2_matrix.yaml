@@ -1,0 +1,61 @@
+# Full GPT-2 matrix sweep (v1.1)
+# Intended to run within <= 72 GPU-hours total by using small subsets.
+
+sweep_name: full_gpt2_matrix_v1_1
+base_config: configs/mve.yaml
+
+runs:
+  - name: ablation_no_contraction
+    overrides:
+      train.lambda_contr: 0.0
+
+  - name: sweep_lambda_contr_0_1
+    overrides:
+      train.lambda_contr: 0.1
+
+  - name: sweep_lambda_contr_1_0
+    overrides:
+      train.lambda_contr: 1.0
+
+  - name: k_only
+    overrides:
+      repair.apply_to: K
+
+  - name: v_only
+    overrides:
+      repair.apply_to: V
+
+  - name: rank_4
+    overrides:
+      repair.rank: 4
+
+  - name: rank_16
+    overrides:
+      repair.rank: 16
+
+  - name: protect_early_4
+    overrides:
+      repair.protect_layers: [0, 1, 2, 3]
+
+  - name: protect_late_4
+    overrides:
+      repair.protect_layers: [18, 19, 20, 21]
+
+  - name: operator_B
+    overrides:
+      repair.family: B
+      repair.alpha_max: 0.9
+
+  - name: operator_C
+    overrides:
+      repair.family: C
+      repair.rank: 8
+
+  - name: loto_holdout_rotation
+    overrides:
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+
+budget:
+  max_total_gpu_hours: 72
+  per_run_gpu_hours_hint: 6
+  notes: "Increase eval counts only after money plots are stable. Use configs/corruption/ood_splits.yaml for LOTO selection."

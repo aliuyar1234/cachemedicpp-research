@@ -1,0 +1,12 @@
+[project]
+name = "cachemedicpp-harness"
+version = "1.1.0"
+description = "Harness repository for CacheMedic++ (specs, configs, paper skeleton)."
+requires-python = ">=3.10"
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I"]

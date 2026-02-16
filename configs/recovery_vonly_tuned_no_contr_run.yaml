@@ -1,0 +1,32 @@
+# Matched no_contr pair for main_contr_vonly_tuned_loto_overwrite.
+
+sweep_name: recovery_vonly_sweep_v1
+base_config: configs/fast_paper_base.yaml
+
+runs:
+  - name: ablation_no_contr_vonly_tuned_loto_overwrite
+    overrides:
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 0.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+budget:
+  max_total_gpu_hours: 6
+  per_run_gpu_hours_hint: 3
+  notes: "Exact ablation pair for tuned V-only run (lambda_contr=0)."

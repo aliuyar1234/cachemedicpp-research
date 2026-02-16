@@ -1,0 +1,18 @@
+{
+  "run_id": "ablation_no_contr_vonly_aggressive_loto_overwrite",
+  "created_utc": "2026-02-16T14:57:50+00:00",
+  "command": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\src\\cachemedicpp\\sweep.py --sweep_config configs/recovery_vonly_sweep_v1.yaml --out_root empty_dirs_for_codex/outputs/runs_recovery --resume",
+  "config_path": "E:/Research/cachemedic_pp_harness_v1_1/cachemedic_pp_harness/empty_dirs_for_codex/outputs/runs_recovery/recovery_vonly_sweep_v1/ablation_no_contr_vonly_aggressive_loto_overwrite/sweep_resolved_config.yaml",
+  "config_hash": "cd520aece1acc2a7349c31838ca2baf9a528afffb4749de5e0c37e1402bde199",
+  "git": {
+    "commit": "unknown",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.10",
+    "torch": "2.9.1+cu128",
+    "transformers": "4.57.3",
+    "cuda": "12.8",
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+  }
+}

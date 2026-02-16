@@ -1,0 +1,15 @@
+{
+  "phase": "eval",
+  "run_id": "main_contr_loto_holdout_overwrite",
+  "timestamp_utc": "2026-02-16T12:59:07+00:00",
+  "status": "completed",
+  "reason": "completed",
+  "step": 90,
+  "total_steps": 90,
+  "progress": 1.0,
+  "steps_remaining": 0,
+  "elapsed_wall_sec": 707.3899372000014,
+  "eta_sec": 0.0,
+  "steps_per_sec": 0.12722827293280278,
+  "resumed_from": null
+}

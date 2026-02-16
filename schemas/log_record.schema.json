@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cachemedicpp.local/schemas/log_record.schema.json",
+  "title": "CacheMedic++ Log Record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["run_id", "phase", "timestamp_utc", "step"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "phase": {"type": "string", "enum": ["train", "eval", "stability", "plots"]},
+    "timestamp_utc": {"type": "string"},
+    "step": {"type": "integer", "minimum": 0},
+    "loss_total": {"type": "number"},
+    "loss_kd": {"type": "number"},
+    "loss_id": {"type": "number"},
+    "loss_contr": {"type": "number"},
+    "rho_mean": {"type": "number"},
+    "rho_p95": {"type": "number"},
+    "corruption": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "type": {"type": "string"},
+        "epsilon": {"type": "number"}
+      }
+    },
+    "tokens_per_sec": {"type": "number"},
+    "gpu_mem_gb": {"type": "number"}
+  }
+}

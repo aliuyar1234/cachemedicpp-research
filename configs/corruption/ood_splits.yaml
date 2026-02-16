@@ -1,0 +1,27 @@
+# Leave-one-type-out (LOTO) protocol definitions (v1.0)
+# Corruption types are canonical strings defined in docs/product-specs/10_THREAT_MODEL.md.
+
+splits:
+  - name: loto_holdout_gaussian
+    train_types: [dropout_zero, orthogonal_rotation, bitflipish_sparse, quant_noise, contiguous_overwrite]
+    test_type: gaussian
+
+  - name: loto_holdout_dropout_zero
+    train_types: [gaussian, orthogonal_rotation, bitflipish_sparse, quant_noise, contiguous_overwrite]
+    test_type: dropout_zero
+
+  - name: loto_holdout_orthogonal_rotation
+    train_types: [gaussian, dropout_zero, bitflipish_sparse, quant_noise, contiguous_overwrite]
+    test_type: orthogonal_rotation
+
+  - name: loto_holdout_bitflipish_sparse
+    train_types: [gaussian, dropout_zero, orthogonal_rotation, quant_noise, contiguous_overwrite]
+    test_type: bitflipish_sparse
+
+  - name: loto_holdout_quant_noise
+    train_types: [gaussian, dropout_zero, orthogonal_rotation, bitflipish_sparse, contiguous_overwrite]
+    test_type: quant_noise
+
+  - name: loto_holdout_contiguous_overwrite
+    train_types: [gaussian, dropout_zero, orthogonal_rotation, bitflipish_sparse, quant_noise]
+    test_type: contiguous_overwrite

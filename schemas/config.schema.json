@@ -1,0 +1,256 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cachemedicpp.local/schemas/config.schema.json",
+  "title": "CacheMedic++ Config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "seed",
+    "device",
+    "dtype",
+    "model",
+    "repair",
+    "corruption",
+    "train",
+    "eval",
+    "stability",
+    "baseline",
+    "data"
+  ],
+  "properties": {
+    "seed": {"type": "integer", "minimum": 0},
+    "device": {"type": "string"},
+    "dtype": {"type": "string", "enum": ["float16", "bfloat16", "float32"]},
+
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "attn_implementation", "use_cache"],
+      "properties": {
+        "name": {"type": "string"},
+        "revision": {"type": ["string", "null"]},
+        "attn_implementation": {"type": "string", "enum": ["eager"]},
+        "use_cache": {"type": "boolean"}
+      }
+    },
+
+    "repair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "rank", "protect_layers", "share_across_heads", "apply_to"],
+      "properties": {
+        "family": {"type": "string", "enum": ["A", "B", "C"]},
+        "rank": {"type": "integer", "minimum": 1},
+        "protect_layers": {"type": "array", "items": {"type": "integer", "minimum": 0}, "minItems": 1},
+        "share_across_heads": {"type": "boolean"},
+        "apply_to": {"type": "string", "enum": ["K", "V", "KV"]},
+        "alpha_max": {"type": "number", "minimum": 0.0, "maximum": 0.999},
+        "conditioning": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["use_layer_embedding", "use_head_embedding"],
+          "properties": {
+            "use_layer_embedding": {"type": "boolean"},
+            "use_head_embedding": {"type": "boolean"}
+          }
+        }
+      }
+    },
+
+    "corruption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mixture", "eps_grid", "axes", "params"],
+      "properties": {
+        "mixture": {"type": "string"},
+        "eps_grid": {"type": "array", "items": {"type": "number", "minimum": 0.0}, "minItems": 1},
+        "axes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["layer_mode", "head_mode", "time_mode"],
+          "properties": {
+            "layer_mode": {"type": "string", "enum": ["all", "bernoulli", "targeted"]},
+            "p_layer": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "layers": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+
+            "head_mode": {"type": "string", "enum": ["all", "bernoulli", "targeted"]},
+            "p_head": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "heads": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+
+            "time_mode": {"type": "string", "enum": ["all_past", "old_only", "window"]},
+            "N_recent": {"type": "integer", "minimum": 0},
+            "window": {"type": "array", "items": {"type": "integer"}, "minItems": 2, "maxItems": 2}
+          }
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dropout_p",
+            "bitflip_p",
+            "bitflip_eps_jump",
+            "quant_bits",
+            "rotation_seed",
+            "overwrite_window",
+            "donor_prompt"
+          ],
+          "properties": {
+            "dropout_p": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "bitflip_p": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "bitflip_eps_jump": {"type": "number", "minimum": 0.0},
+            "quant_bits": {"type": "integer", "minimum": 2, "maximum": 16},
+            "rotation_seed": {"type": "integer", "minimum": 0},
+            "overwrite_window": {
+              "type": "array",
+              "items": {"type": "integer", "minimum": 0},
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "donor_prompt": {"type": "string"}
+          }
+        }
+      }
+    },
+
+    "train": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "steps",
+        "lr",
+        "batch_size",
+        "prefix_len",
+        "temperature",
+        "lambda_id",
+        "lambda_contr",
+        "alpha_contr",
+        "clean_batch_prob",
+        "grad_clip",
+        "log_every",
+        "save_every"
+      ],
+      "properties": {
+        "steps": {"type": "integer", "minimum": 1},
+        "lr": {"type": "number", "exclusiveMinimum": 0.0},
+        "batch_size": {"type": "integer", "enum": [1]},
+        "prefix_len": {"type": "integer", "minimum": 1},
+        "temperature": {"type": "number", "minimum": 0.5},
+        "lambda_id": {"type": "number", "minimum": 0.0},
+        "lambda_contr": {"type": "number", "minimum": 0.0},
+        "alpha_contr": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "clean_batch_prob": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "grad_clip": {"type": "number", "minimum": 0.0},
+        "log_every": {"type": "integer", "minimum": 1},
+        "save_every": {"type": "integer", "minimum": 1}
+      }
+    },
+
+    "eval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tasks", "corruption_eval", "max_seq_len", "measure_overhead", "ood_protocol"],
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "num_examples"],
+            "properties": {
+              "name": {"type": "string", "enum": ["wikitext2_ppl", "sst2_prompted", "needle_long_context"]},
+              "num_examples": {"type": "integer", "minimum": 1}
+            }
+          }
+        },
+        "corruption_eval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["eps", "types"],
+          "properties": {
+            "eps": {"type": "array", "items": {"type": "number", "minimum": 0.0}, "minItems": 1},
+            "types": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "gaussian",
+                  "dropout_zero",
+                  "orthogonal_rotation",
+                  "bitflipish_sparse",
+                  "quant_noise",
+                  "contiguous_overwrite",
+                  "targeted"
+                ]
+              }
+            }
+          }
+        },
+        "max_seq_len": {"type": "integer", "minimum": 8},
+        "measure_overhead": {"type": "boolean"},
+        "ood_protocol": {"type": ["string", "null"]},
+        "ood_splits_path": {"type": ["string", "null"]}
+      }
+    },
+
+    "stability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["num_prompts", "delta_norms", "num_directions", "topk_logits", "layers", "time_mode", "N_recent"],
+      "properties": {
+        "num_prompts": {"type": "integer", "minimum": 1},
+        "delta_norms": {"type": "array", "items": {"type": "number", "minimum": 0.0}, "minItems": 1},
+        "num_directions": {"type": "integer", "minimum": 1},
+        "topk_logits": {"type": "integer", "minimum": 1},
+        "layers": {"type": "array", "items": {"type": "integer", "minimum": 0}, "minItems": 1},
+        "head_subset": {"type": ["array", "null"], "items": {"type": "integer", "minimum": 0}},
+        "time_mode": {"type": "string", "enum": ["all_past", "old_only", "window"]},
+        "N_recent": {"type": "integer", "minimum": 0}
+      }
+    },
+
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["smoothing_beta", "dropout_p", "clip_val", "target_rms"],
+      "properties": {
+        "smoothing_beta": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "dropout_p": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "clip_val": {"type": "number", "minimum": 0.0},
+        "target_rms": {"type": "number", "minimum": 0.0}
+      }
+    },
+
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["use_offline", "offline_paths", "long_context"],
+      "properties": {
+        "use_offline": {"type": "boolean"},
+        "offline_paths": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["wikitext2", "sst2"],
+          "properties": {
+            "wikitext2": {"type": "string"},
+            "sst2": {"type": "string"}
+          }
+        },
+        "long_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["seed", "context_len", "needle_token", "needle_value", "position_frac", "question_template"],
+          "properties": {
+            "seed": {"type": "integer", "minimum": 0},
+            "context_len": {"type": "integer", "minimum": 32},
+            "needle_token": {"type": "string"},
+            "needle_value": {"type": "string"},
+            "position_frac": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "question_template": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

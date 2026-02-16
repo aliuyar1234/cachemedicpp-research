@@ -1,0 +1,28 @@
+\section{Method: CacheMedic++}
+
+CacheMedic++ inserts a small operator $R_\phi$ inside attention. After past KV concatenation, we optionally apply corruption and then repair:
+\[
+(K, V) \xrightarrow{C} (K_{corr}, V_{corr}) \xrightarrow{R_\phi} (K_{hat}, V_{hat})
+\]
+Attention logits are computed from $q$ and $K_{hat}$. Base model weights are frozen; only $\phi$ is trained.
+
+We implement three repair families (A/B/C) and use Option A by default. The tuned configuration in this paper is V-only repair with rank 4 over two protected layers.
+
+\paragraph{Training objective.}
+For each batch, we combine a distillation objective with clean-state identity and a contraction term on corrupted states:
+\[
+\mathcal{L} = \mathcal{L}_{KD} + \lambda_{id}\mathcal{L}_{id} + \lambda_{contr}\mathcal{L}_{contr}.
+\]
+The contraction term penalizes repaired states that remain far from the clean reference:
+\[
+\rho_l = \frac{\lVert S^{(l)}_{rep} - S^{(l)}_{clean} \rVert_F}{\lVert S^{(l)}_{corr} - S^{(l)}_{clean} \rVert_F + \epsilon_0}, \qquad
+\mathcal{L}_{contr} = \frac{1}{|L|}\sum_{l \in L}\max(0,\rho_l - \alpha)^2.
+\]
+In the tuned run we use $\lambda_{id}=4.0$, $\lambda_{contr}=3.0$, and clean-batch probability $0.45$.
+
+\begin{figure}[t]
+  \centering
+  \FigOrBox[width=0.95\linewidth]{figures/figB_clean_vs_overhead_pareto.png}
+  \caption{Clean regression vs overhead tradeoff for repair operator sweeps.}
+  \label{fig:pareto}
+\end{figure}

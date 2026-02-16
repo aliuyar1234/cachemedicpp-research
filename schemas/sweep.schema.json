@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cachemedicpp.local/schemas/sweep.schema.json",
+  "title": "CacheMedic++ Sweep Config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sweep_name", "base_config", "runs"],
+  "properties": {
+    "sweep_name": {"type": "string"},
+    "base_config": {"type": "string"},
+    "out_root": {"type": "string"},
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "overrides"],
+        "properties": {
+          "name": {"type": "string"},
+          "overrides": {
+            "type": "object",
+            "additionalProperties": {
+              "type": ["string", "number", "integer", "boolean", "null", "array", "object"]
+            }
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["max_total_gpu_hours", "per_run_gpu_hours_hint", "notes"],
+      "properties": {
+        "max_total_gpu_hours": {"type": "number", "minimum": 0.0},
+        "per_run_gpu_hours_hint": {"type": "number", "minimum": 0.0},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

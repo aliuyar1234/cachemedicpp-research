@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cachemedicpp.local/schemas/run_record.schema.json",
+  "title": "CacheMedic++ Run Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "created_utc", "command", "config_path", "config_hash", "git", "env"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "created_utc": {"type": "string"},
+    "command": {"type": "string"},
+    "config_path": {"type": "string"},
+    "config_hash": {"type": "string"},
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "dirty"],
+      "properties": {
+        "commit": {"type": "string"},
+        "dirty": {"type": "boolean"}
+      }
+    },
+    "env": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["python", "torch", "transformers", "cuda", "gpu_name"],
+      "properties": {
+        "python": {"type": "string"},
+        "torch": {"type": "string"},
+        "transformers": {"type": "string"},
+        "cuda": {"type": "string"},
+        "gpu_name": {"type": "string"}
+      }
+    }
+  }
+}

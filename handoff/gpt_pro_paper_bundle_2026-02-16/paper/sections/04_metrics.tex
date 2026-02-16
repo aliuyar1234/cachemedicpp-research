@@ -1,0 +1,31 @@
+\section{Stability Metrics}
+
+We treat stability as a measurable object and report two primary metrics.
+
+\paragraph{Logit sensitivity.} We estimate expected next-token logit drift under finite-difference perturbations of the KV state:
+\[
+\mathrm{Sens}(\delta)=\mathbb{E}_{p,d}\left[\left\|z_{\mathrm{top}k}\!\left(S+\delta d\right)-z_{\mathrm{top}k}(S)\right\|_2\right],
+\]
+where $p$ indexes prompts, $d$ is a normalized perturbation direction, and $z_{\mathrm{top}k}$ selects top-$k$ logits at the measurement token.
+
+\paragraph{Amplification maps.} We estimate layer/head-local gain factors
+\[
+\gamma(l,h)=\frac{\|\Delta z\|_2}{\|\Delta S_{l,h}\|_F}
+\]
+by injecting perturbations into one layer/head at a time and measuring induced logit drift.
+
+Our default stability settings are $\delta \in \{0.0,1.0,2.0\}$, top-$k=512$, 60 prompts, and 4 perturbation directions per prompt.
+
+\begin{figure}[t]
+  \centering
+  \FigOrBox[width=0.95\linewidth]{figures/figC_logit_sensitivity.png}
+  \caption{Logit sensitivity curves as a function of perturbation magnitude.}
+  \label{fig:sens}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \FigOrBox[width=0.95\linewidth]{figures/figD_amplification_map.png}
+  \caption{Amplification map heatmap $\gamma(l,h)$ before and after repair.}
+  \label{fig:amp}
+\end{figure}

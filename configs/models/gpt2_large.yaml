@@ -1,0 +1,6 @@
+name: gpt2-large
+revision: null
+attn_implementation: eager
+use_cache: true
+notes:
+  default_protect_layers: [20, 21, 22, 23]

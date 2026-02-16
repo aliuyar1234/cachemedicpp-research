@@ -1,0 +1,182 @@
+{
+  "sweep_name": "recovery_optionb_sweep_v1",
+  "base_config": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\configs\\fast_paper_base.yaml",
+  "num_runs": 2,
+  "runs": [
+    {
+      "name": "main_contr_optionb_loto_overwrite",
+      "run_dir": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_recovery\\recovery_optionb_sweep_v1\\main_contr_optionb_loto_overwrite",
+      "overrides": {
+        "eval.ood_protocol": "loto_holdout_contiguous_overwrite",
+        "repair.family": "B",
+        "repair.apply_to": "V",
+        "repair.rank": 4,
+        "repair.alpha_max": 0.9,
+        "repair.protect_layers": [
+          10,
+          11
+        ],
+        "train.steps": 2500,
+        "train.lambda_id": 4.0,
+        "train.lambda_contr": 2.0,
+        "train.clean_batch_prob": 0.45,
+        "eval.corruption_eval.eps": [
+          0.0,
+          0.08,
+          0.16
+        ],
+        "stability.num_prompts": 60,
+        "eval.tasks": [
+          {
+            "name": "wikitext2_ppl",
+            "num_examples": 400
+          },
+          {
+            "name": "sst2_prompted",
+            "num_examples": 250
+          },
+          {
+            "name": "needle_long_context",
+            "num_examples": 80
+          }
+        ]
+      },
+      "train": {
+        "run_id": "main_contr_optionb_loto_overwrite",
+        "run_dir": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_recovery\\recovery_optionb_sweep_v1\\main_contr_optionb_loto_overwrite",
+        "steps": 2500,
+        "last_step": 2500,
+        "status": "completed",
+        "resumed": false,
+        "resumed_from": null
+      },
+      "eval": {
+        "run_id": "main_contr_optionb_loto_overwrite",
+        "status": "completed",
+        "best_heuristic": "smoothing",
+        "robustness_auc": {
+          "no_defense": 0.03839485419076178,
+          "best_heuristic": 0.038978492329101846,
+          "cachemedic": 0.039672633542349886
+        },
+        "elapsed_wall_sec": 320.00152909999815,
+        "resumed": false
+      },
+      "stability": {
+        "run_id": "main_contr_optionb_loto_overwrite",
+        "status": "completed",
+        "points": 3,
+        "layers": 4,
+        "heads": 16,
+        "best_heuristic": "smoothing",
+        "checkpoint_loaded": true,
+        "elapsed_wall_sec": 391.33371559999796,
+        "resumed": false
+      },
+      "plots": {
+        "status": "ok",
+        "figures": [
+          "figA_score_vs_eps.png",
+          "figB_clean_vs_overhead_pareto.png",
+          "figC_logit_sensitivity.png",
+          "figD_amplification_map.png"
+        ],
+        "tables": [
+          "table_main_results.tex",
+          "table_ablation_summary.tex"
+        ]
+      }
+    },
+    {
+      "name": "ablation_no_contr_optionb_loto_overwrite",
+      "run_dir": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_recovery\\recovery_optionb_sweep_v1\\ablation_no_contr_optionb_loto_overwrite",
+      "overrides": {
+        "eval.ood_protocol": "loto_holdout_contiguous_overwrite",
+        "repair.family": "B",
+        "repair.apply_to": "V",
+        "repair.rank": 4,
+        "repair.alpha_max": 0.9,
+        "repair.protect_layers": [
+          10,
+          11
+        ],
+        "train.steps": 2500,
+        "train.lambda_id": 4.0,
+        "train.lambda_contr": 0.0,
+        "train.clean_batch_prob": 0.45,
+        "eval.corruption_eval.eps": [
+          0.0,
+          0.08,
+          0.16
+        ],
+        "stability.num_prompts": 60,
+        "eval.tasks": [
+          {
+            "name": "wikitext2_ppl",
+            "num_examples": 400
+          },
+          {
+            "name": "sst2_prompted",
+            "num_examples": 250
+          },
+          {
+            "name": "needle_long_context",
+            "num_examples": 80
+          }
+        ]
+      },
+      "train": {
+        "run_id": "ablation_no_contr_optionb_loto_overwrite",
+        "run_dir": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_recovery\\recovery_optionb_sweep_v1\\ablation_no_contr_optionb_loto_overwrite",
+        "steps": 2500,
+        "last_step": 2500,
+        "status": "completed",
+        "resumed": false,
+        "resumed_from": null
+      },
+      "eval": {
+        "run_id": "ablation_no_contr_optionb_loto_overwrite",
+        "status": "completed",
+        "best_heuristic": "smoothing",
+        "robustness_auc": {
+          "no_defense": 0.03839485419076178,
+          "best_heuristic": 0.038978492329101846,
+          "cachemedic": 0.039939105439559724
+        },
+        "elapsed_wall_sec": 314.2510880000009,
+        "resumed": false
+      },
+      "stability": {
+        "run_id": "ablation_no_contr_optionb_loto_overwrite",
+        "status": "completed",
+        "points": 3,
+        "layers": 4,
+        "heads": 16,
+        "best_heuristic": "smoothing",
+        "checkpoint_loaded": true,
+        "elapsed_wall_sec": 380.7755161000023,
+        "resumed": false
+      },
+      "plots": {
+        "status": "ok",
+        "figures": [
+          "figA_score_vs_eps.png",
+          "figB_clean_vs_overhead_pareto.png",
+          "figC_logit_sensitivity.png",
+          "figD_amplification_map.png"
+        ],
+        "tables": [
+          "table_main_results.tex",
+          "table_ablation_summary.tex"
+        ]
+      }
+    }
+  ],
+  "budget": {
+    "max_total_gpu_hours": 10,
+    "per_run_gpu_hours_hint": 4,
+    "notes": "Recovery Option-B A/B: bounded shrinkage with contraction vs no_contr."
+  },
+  "status": "completed",
+  "paused_run": null
+}

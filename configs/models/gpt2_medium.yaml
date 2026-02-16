@@ -1,0 +1,6 @@
+name: gpt2-medium
+revision: null
+attn_implementation: eager
+use_cache: true
+notes:
+  default_protect_layers: [8, 9, 10, 11]

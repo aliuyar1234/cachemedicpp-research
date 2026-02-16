@@ -1,0 +1,35 @@
+# OOD leave-one-type-out sweep (all holdout types, v1.1)
+# Runs each split with the canonical MVE base config.
+
+sweep_name: ood_loto_all_v1_1
+base_config: configs/mve.yaml
+
+runs:
+  - name: loto_holdout_gaussian
+    overrides:
+      eval.ood_protocol: loto_holdout_gaussian
+
+  - name: loto_holdout_dropout_zero
+    overrides:
+      eval.ood_protocol: loto_holdout_dropout_zero
+
+  - name: loto_holdout_orthogonal_rotation
+    overrides:
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+
+  - name: loto_holdout_bitflipish_sparse
+    overrides:
+      eval.ood_protocol: loto_holdout_bitflipish_sparse
+
+  - name: loto_holdout_quant_noise
+    overrides:
+      eval.ood_protocol: loto_holdout_quant_noise
+
+  - name: loto_holdout_contiguous_overwrite
+    overrides:
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+
+budget:
+  max_total_gpu_hours: 36
+  per_run_gpu_hours_hint: 6
+  notes: "Complete LOTO holdout coverage for paper OOD section."

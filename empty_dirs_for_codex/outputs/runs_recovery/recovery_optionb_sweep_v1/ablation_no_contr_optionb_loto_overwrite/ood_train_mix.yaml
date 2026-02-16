@@ -1,0 +1,18 @@
+name: ood_train_mix_loto_holdout_contiguous_overwrite
+weights:
+  gaussian: 0.2777777777777778
+  dropout_zero: 0.22222222222222224
+  orthogonal_rotation: 0.16666666666666666
+  bitflipish_sparse: 0.16666666666666666
+  quant_noise: 0.16666666666666666
+default_params:
+  dropout_p: 0.02
+  bitflip_p: 0.0005
+  bitflip_eps_jump: 8.0
+  quant_bits: 8
+  rotation_seed: 999
+  overwrite_window:
+  - 16
+  - 48
+  donor_prompt: 'Donor: This is a deterministic donor prompt for contiguous KV overwrite
+    evaluation.'

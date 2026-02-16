@@ -1,0 +1,18 @@
+{
+  "run_id": "main_contr_optionb_loto_overwrite",
+  "created_utc": "2026-02-16T15:22:09+00:00",
+  "command": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\src\\cachemedicpp\\sweep.py --sweep_config configs/recovery_optionb_sweep_v1.yaml --out_root empty_dirs_for_codex/outputs/runs_recovery --resume",
+  "config_path": "E:/Research/cachemedic_pp_harness_v1_1/cachemedic_pp_harness/empty_dirs_for_codex/outputs/runs_recovery/recovery_optionb_sweep_v1/main_contr_optionb_loto_overwrite/sweep_resolved_config.yaml",
+  "config_hash": "a1c733adc3261bad9b6e000891f945d9e8344e291c61bfd39826f42fa311cf24",
+  "git": {
+    "commit": "unknown",
+    "dirty": false
+  },
+  "env": {
+    "python": "3.12.10",
+    "torch": "2.9.1+cu128",
+    "transformers": "4.57.3",
+    "cuda": "12.8",
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+  }
+}

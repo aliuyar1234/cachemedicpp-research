@@ -1,0 +1,21 @@
+# Canonical corruption mixture Pi (v1.0)
+# Referenced by configs via: corruption.mixture: "default_mix"
+
+name: default_mix
+weights:
+  gaussian: 0.25
+  dropout_zero: 0.20
+  orthogonal_rotation: 0.15
+  bitflipish_sparse: 0.15
+  quant_noise: 0.15
+  contiguous_overwrite: 0.10
+
+# Type-specific default parameters (can be overridden by top-level config.corruption.params)
+default_params:
+  dropout_p: 0.02
+  bitflip_p: 0.0005
+  bitflip_eps_jump: 8.0
+  quant_bits: 8
+  rotation_seed: 999
+  overwrite_window: [16, 48]
+  donor_prompt: "Donor: This is a deterministic donor prompt for contiguous KV overwrite evaluation."

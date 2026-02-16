@@ -1,0 +1,34 @@
+# Fast paper sweep (sweet spot): main + contraction ablation + quick V-only check.
+
+sweep_name: fast_paper_sweep_v1
+base_config: configs/fast_paper_base.yaml
+
+runs:
+  - name: main_contr_loto_holdout_overwrite
+    overrides:
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      train.lambda_contr: 0.5
+
+  - name: ablation_no_contr_loto_holdout_overwrite
+    overrides:
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      train.lambda_contr: 0.0
+
+  - name: quick_v_only_check
+    overrides:
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      repair.apply_to: V
+      train.steps: 2500
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+budget:
+  max_total_gpu_hours: 20
+  per_run_gpu_hours_hint: 6
+  notes: "Sweet-spot sweep for paper-quality evidence on a single GPU."

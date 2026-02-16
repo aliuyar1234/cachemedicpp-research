@@ -1,0 +1,6 @@
+name: Qwen/Qwen2.5-7B
+revision: null
+attn_implementation: eager
+use_cache: true
+notes:
+  default_protect_layers: [12, 13, 14, 15, 16, 17, 18, 19]

@@ -1,0 +1,98 @@
+{
+  "sweep_name": "recovery_vonly_sweep_v1",
+  "base_config": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\configs\\fast_paper_base.yaml",
+  "num_runs": 1,
+  "runs": [
+    {
+      "name": "ablation_no_contr_vonly_tuned_loto_overwrite",
+      "run_dir": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_recovery\\recovery_vonly_sweep_v1\\ablation_no_contr_vonly_tuned_loto_overwrite",
+      "overrides": {
+        "eval.ood_protocol": "loto_holdout_contiguous_overwrite",
+        "repair.family": "A",
+        "repair.apply_to": "V",
+        "repair.rank": 4,
+        "repair.protect_layers": [
+          10,
+          11
+        ],
+        "train.steps": 2500,
+        "train.lambda_id": 4.0,
+        "train.lambda_contr": 0.0,
+        "train.alpha_contr": 0.75,
+        "train.clean_batch_prob": 0.45,
+        "eval.corruption_eval.eps": [
+          0.0,
+          0.08,
+          0.16
+        ],
+        "stability.num_prompts": 60,
+        "eval.tasks": [
+          {
+            "name": "wikitext2_ppl",
+            "num_examples": 400
+          },
+          {
+            "name": "sst2_prompted",
+            "num_examples": 250
+          },
+          {
+            "name": "needle_long_context",
+            "num_examples": 80
+          }
+        ]
+      },
+      "train": {
+        "run_id": "ablation_no_contr_vonly_tuned_loto_overwrite",
+        "run_dir": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_recovery\\recovery_vonly_sweep_v1\\ablation_no_contr_vonly_tuned_loto_overwrite",
+        "steps": 2500,
+        "last_step": 2500,
+        "status": "completed",
+        "resumed": false,
+        "resumed_from": null
+      },
+      "eval": {
+        "run_id": "ablation_no_contr_vonly_tuned_loto_overwrite",
+        "status": "completed",
+        "best_heuristic": "smoothing",
+        "robustness_auc": {
+          "no_defense": 0.03839485419076178,
+          "best_heuristic": 0.038978492329101846,
+          "cachemedic": 0.038817445283716556
+        },
+        "elapsed_wall_sec": 305.46049470000435,
+        "resumed": false
+      },
+      "stability": {
+        "run_id": "ablation_no_contr_vonly_tuned_loto_overwrite",
+        "status": "completed",
+        "points": 3,
+        "layers": 4,
+        "heads": 16,
+        "best_heuristic": "smoothing",
+        "checkpoint_loaded": true,
+        "elapsed_wall_sec": 405.88618049999786,
+        "resumed": false
+      },
+      "plots": {
+        "status": "ok",
+        "figures": [
+          "figA_score_vs_eps.png",
+          "figB_clean_vs_overhead_pareto.png",
+          "figC_logit_sensitivity.png",
+          "figD_amplification_map.png"
+        ],
+        "tables": [
+          "table_main_results.tex",
+          "table_ablation_summary.tex"
+        ]
+      }
+    }
+  ],
+  "budget": {
+    "max_total_gpu_hours": 6,
+    "per_run_gpu_hours_hint": 3,
+    "notes": "Exact ablation pair for tuned V-only run (lambda_contr=0)."
+  },
+  "status": "completed",
+  "paused_run": null
+}

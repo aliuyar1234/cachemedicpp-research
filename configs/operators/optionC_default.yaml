@@ -1,0 +1,11 @@
+# Repair operator default: Option C (v1.0)
+family: C
+rank: 8
+share_across_heads: true
+apply_to: KV
+conditioning:
+  use_layer_embedding: true
+  use_head_embedding: false
+notes:
+  param_count_global_formula: "O(d*r) + O(L*r)" 
+  compute_per_layer_formula: "O(H*T*d*r)" 

@@ -1,0 +1,20 @@
+{
+  "run_id": "ablation_no_contr_loto_holdout_overwrite",
+  "phase": "train",
+  "timestamp_utc": "2026-02-16T13:13:37+00:00",
+  "status": "completed",
+  "reason": "completed",
+  "step": 4500,
+  "total_steps": 4500,
+  "progress": 1.0,
+  "steps_remaining": 0,
+  "elapsed_wall_sec": 177.3261504999973,
+  "eta_sec": 0.0,
+  "steps_per_sec": 25.376967736070423,
+  "tokens_per_sec": 2074.207145985748,
+  "gpu_mem_gb": 0.7740316390991211,
+  "latest_repair_checkpoint": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_fast_paper_core\\fast_paper_sweep_core_v1\\ablation_no_contr_loto_holdout_overwrite\\checkpoints\\repair_step_4500.pt",
+  "latest_train_state": "E:\\Research\\cachemedic_pp_harness_v1_1\\cachemedic_pp_harness\\empty_dirs_for_codex\\outputs\\runs_fast_paper_core\\fast_paper_sweep_core_v1\\ablation_no_contr_loto_holdout_overwrite\\checkpoints\\train_state_step_4500.pt",
+  "resumed_from": null,
+  "loss_total": 0.3564257323741913
+}

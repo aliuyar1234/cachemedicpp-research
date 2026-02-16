@@ -1,0 +1,35 @@
+# Recovery second-model confirmation run (Gate 3 candidate).
+
+sweep_name: recovery_second_model_gpt2_large_v1
+base_config: configs/fast_paper_base.yaml
+
+runs:
+  - name: second_model_gpt2_large_vonly_tuned
+    overrides:
+      model.name: gpt2-large
+      eval.ood_protocol: null
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [16, 17]
+      train.steps: 2000
+      train.lambda_id: 4.0
+      train.lambda_contr: 3.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      eval.corruption_eval.types: [gaussian, orthogonal_rotation, contiguous_overwrite]
+      stability.num_prompts: 80
+      stability.num_directions: 4
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+budget:
+  max_total_gpu_hours: 6
+  per_run_gpu_hours_hint: 4
+  notes: "Second-model qualitative confirmation with tuned V-only Option A."

@@ -1,0 +1,15 @@
+{
+  "phase": "stability",
+  "run_id": "ablation_no_contr_vonly_tuned_loto_overwrite",
+  "timestamp_utc": "2026-02-16T18:08:00+00:00",
+  "status": "completed",
+  "reason": "completed",
+  "step": 7,
+  "total_steps": 7,
+  "progress": 1.0,
+  "steps_remaining": 0,
+  "elapsed_wall_sec": 405.88618049999786,
+  "eta_sec": 0.0,
+  "steps_per_sec": 0.017246214176045438,
+  "resumed_from": null
+}

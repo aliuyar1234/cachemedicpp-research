@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cachemedicpp.local/schemas/metric_record.schema.json",
+  "title": "CacheMedic++ Metrics File",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "config_hash", "metrics", "settings"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "config_hash": {"type": "string"},
+    "metrics": {"type": "object", "additionalProperties": true},
+    "settings": {"type": "object", "additionalProperties": true}
+  }
+}

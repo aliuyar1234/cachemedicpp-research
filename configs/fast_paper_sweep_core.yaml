@@ -1,0 +1,20 @@
+# Fast paper core sweep (minimum reviewer-robust evidence set).
+
+sweep_name: fast_paper_sweep_core_v1
+base_config: configs/fast_paper_base.yaml
+
+runs:
+  - name: main_contr_loto_holdout_overwrite
+    overrides:
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      train.lambda_contr: 0.5
+
+  - name: ablation_no_contr_loto_holdout_overwrite
+    overrides:
+      eval.ood_protocol: loto_holdout_contiguous_overwrite
+      train.lambda_contr: 0.0
+
+budget:
+  max_total_gpu_hours: 14
+  per_run_gpu_hours_hint: 6
+  notes: "Sweet-spot core: OOD holdout + contraction ablation."

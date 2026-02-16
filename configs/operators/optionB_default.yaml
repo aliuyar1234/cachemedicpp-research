@@ -1,0 +1,9 @@
+# Repair operator default: Option B (v1.0)
+family: B
+rank: 8
+share_across_heads: true
+apply_to: KV
+alpha_max: 0.9
+notes:
+  param_count_per_layer_formula: "~ (4*d*r + 4*r^2) typical"
+  compute_per_layer_formula: "O(H*T*d*r)" 

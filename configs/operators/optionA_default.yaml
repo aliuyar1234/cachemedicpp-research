@@ -1,0 +1,8 @@
+# Repair operator default: Option A (v1.0)
+family: A
+rank: 8
+share_across_heads: true
+apply_to: KV
+notes:
+  param_count_per_layer_formula: "~ (6*d*r + 2*r^2) where d=head_dim, r=rank"
+  compute_per_layer_formula: "O(H*T*d*r)" 
