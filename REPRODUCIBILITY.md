@@ -1,10 +1,6 @@
-# Reproducibility Policy - CacheMedic++ Harness v1.1
+﻿# Reproducibility Policy - CacheMedic++ Research Repository
 
 This project targets fast iteration with reproducible artifacts and resumable execution.
-
-Operational status and next commands are tracked in:
-
-- `docs/exec-plans/35_SWEETSPOT_STATUS_BOARD.md`
 
 ## Required run artifacts (per run directory)
 
@@ -26,7 +22,7 @@ A run directory must contain:
 
 ## Resume-state requirements
 
-The harness must resume from saved state without recomputing completed units:
+The repository must resume from saved state without recomputing completed units:
 
 - Train resumes from `checkpoints/train_state_latest.pt` (or latest step snapshot).
 - Eval resumes from `metrics/eval_progress.json`.
@@ -43,7 +39,7 @@ Phase-specific pause acknowledgements are written to:
 
 - All stochasticity uses dedicated seeded generators.
 - Orthogonal rotation matrices are generated deterministically on CPU then moved to GPU.
-- v1 uses eager attention only; fused attention paths are disallowed.
+- Eager attention is required; fused attention paths are disallowed.
 
 ## Seed and flag checklist
 
@@ -56,7 +52,12 @@ Phase-specific pause acknowledgements are written to:
 ## Manifest and integrity
 
 - The repository ships `MANIFEST.sha256` for file-hash integrity.
-- Manifest scope is source-of-record files only; runtime artifacts are excluded:
+- Manifest scope is source-of-record files only; runtime and internal artifacts are excluded:
+  - `handoff/`
+  - `docs/exec-plans/`
+  - `docs/design-docs/`
+  - `docs/generated/`
+  - `docs/references/`
   - `empty_dirs_for_codex/outputs/`
   - `outputs/`
   - `.pytest_cache/`
@@ -65,5 +66,5 @@ Phase-specific pause acknowledgements are written to:
 ## What is allowed to vary
 
 - Throughput and wall-clock timings may vary by machine load and driver/runtime details.
-- Metric variance may exist due to nondeterministic GPU behavior outside strict harness controls.
+- Metric variance may exist due to nondeterministic GPU behavior outside strict repository controls.
 - For final reporting, run multiple seeds when confidence intervals are required.

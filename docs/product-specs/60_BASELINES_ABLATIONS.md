@@ -1,4 +1,4 @@
-# Baselines and Ablations — v1.0
+﻿# Baselines and Ablations
 
 This spec defines the required baselines and the minimum ablations reviewers will expect.
 

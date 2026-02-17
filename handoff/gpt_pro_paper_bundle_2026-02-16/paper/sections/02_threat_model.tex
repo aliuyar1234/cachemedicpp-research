@@ -1,5 +1,0 @@
-\section{Threat and Fault Model}
-
-We define a corruption family $C$ that perturbs the KV cache during inference. Corruption types are: Gaussian noise, dropout/zeroing, orthogonal rotations, sparse bitflip-like sign/jump perturbations, quantization noise, and contiguous overwrite of a cached segment. Corruptions are applied through deterministic masks over layer, head, and time axes.
-
-For evaluation we use $\epsilon \in \{0.0, 0.08, 0.16\}$ and report robustness curves across this grid. Our out-of-distribution (OOD) protocol is leave-one-type-out (LOTO): the holdout type is contiguous overwrite, excluded from training corruption mixtures and used for OOD evaluation.

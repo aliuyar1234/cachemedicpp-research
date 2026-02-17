@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Validate shipped YAML configs against JSON Schemas.
 
-This is a harness integrity check: configs must match schemas, and schemas must
+This is a repository integrity check: configs must match schemas, and schemas must
 match the SSOT specs.
 
 Checks performed:
@@ -82,3 +82,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

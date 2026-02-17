@@ -10,19 +10,20 @@ We explicitly do \emph{not} address KV compression or eviction; our goal is robu
 CacheMedic++ treats transformer inference with a KV cache as a dynamical system over persistent state $S_t$ (the collection of cached $(K,V)$ tensors). We introduce a lightweight \emph{stability operator} $R_\phi$ inserted \emph{inside attention}:
 after past/current cache concatenation, we (optionally) corrupt the cache and then apply $R_\phi$ before attention logits are computed.
 The base model parameters are frozen; we train only $\phi$ via self-distillation from clean teacher logits under a deterministic corruption family.
-To go beyond generic denoising, we add an explicit \textbf{contraction regularizer} that encourages repaired cache states to contract toward the clean-cache manifold.
+We also study an explicit \textbf{contraction regularizer} that encourages repaired cache states to contract toward the clean-cache manifold.
 
 \paragraph{What we can claim (based on bundled evidence).}
 On gpt2-medium under a leave-one-type-out (LOTO) protocol that holds out \texttt{contiguous\_overwrite} during training and uses it for evaluation, CacheMedic++ improves clean score from 0.2373 to 0.2466 and robustness AUC from 0.0390 (best heuristic) to 0.0401 (Table~\ref{tab:main}).
-In a paired ablation that toggles only the contraction weight, contraction improves robustness AUC from 0.0388 to 0.0401 and reduces logit sensitivity relative to the no-contraction variant (Table~\ref{tab:ablations}, Fig.~\ref{fig:sens}).
+In the canonical paired ablation that toggles only the contraction weight, contraction improves robustness AUC from 0.0388 to 0.0401 and reduces logit sensitivity relative to the no-contraction variant (Table~\ref{tab:ablations}, Fig.~\ref{fig:sens}).
+However, a five-seed replication shows near-neutral average effects and bootstrap intervals that include no effect (Tables~\ref{tab:seedrep} and~\ref{tab:seedrep_ci}), and a second three-seed replication on held-out \texttt{orthogonal\_rotation} shows the same non-robust contraction pattern (Table~\ref{tab:orth3}).
 A second-model run on gpt2-large shows qualitative transfer in the same direction (Table~\ref{tab:second_model}).
-We emphasize paired ablations and OOD robustness/clean tradeoffs as our strongest evidence; \textbf{absolute stability versus the unmodified baseline is not the central win} in this setting.
+We therefore emphasize OOD robustness/clean tradeoffs and second-model transfer as our strongest evidence; \textbf{absolute stability versus the unmodified baseline is not the central win} in this setting.
 
 \paragraph{Contributions.}
 \begin{itemize}
-  \item \textbf{Contractive KV stabilization.} We introduce CacheMedic++, a learned KV-cache stability operator $R_\phi$ inserted inside attention; base model weights remain frozen and only $R_\phi$ is trained.
-  \item \textbf{Distillation + contraction training.} We train $R_\phi$ via self-distillation under a deterministic corruption family and add an explicit contraction regularizer toward clean-cache reference states.
-  \item \textbf{Stability as a first-class metric.} We provide reproducible protocols for logit sensitivity curves and layer/head amplification maps, and we report paired contraction ablations and second-model transfer.
+  \item \textbf{Distillation-based KV repair.} We introduce CacheMedic++, a learned KV-cache stability operator $R_\phi$ inserted inside attention; base model weights remain frozen and only $R_\phi$ is trained via self-distillation.
+  \item \textbf{Controlled contraction study.} We evaluate an explicit contraction regularizer with paired no\_contr comparisons and five-seed replication, finding a neutral average-case effect in this regime.
+  \item \textbf{Stability as a first-class metric.} We provide reproducible protocols for logit sensitivity curves and layer/head amplification maps, and we report paired ablations and second-model transfer.
 \end{itemize}
 
 \begin{figure}[t]

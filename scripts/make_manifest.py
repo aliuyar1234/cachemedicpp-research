@@ -18,9 +18,24 @@ EXCLUDE_FILES = {"MANIFEST.sha256"}
 # .git is not part of the shipped artifact, but developers may run this script in a checkout.
 EXCLUDE_DIRS = {".git"}
 EXCLUDE_PATH_PREFIXES = {
+    "handoff/",
+    "docs/exec-plans/",
+    "docs/design-docs/",
+    "docs/generated/",
+    "docs/references/",
     "empty_dirs_for_codex/outputs/",
     "outputs/",
     ".pytest_cache/",
+}
+EXCLUDE_SUFFIXES = {
+    ".aux",
+    ".bbl",
+    ".blg",
+    ".fdb_latexmk",
+    ".fls",
+    ".log",
+    ".out",
+    ".synctex.gz",
 }
 
 
@@ -38,7 +53,9 @@ def should_exclude(path: Path, root: Path) -> bool:
     if any(part in EXCLUDE_DIRS for part in path.parts):
         return True
     rel = str(path.relative_to(root)).replace("\\", "/")
-    return any(rel.startswith(prefix) for prefix in EXCLUDE_PATH_PREFIXES)
+    if any(rel.startswith(prefix) for prefix in EXCLUDE_PATH_PREFIXES):
+        return True
+    return any(rel.endswith(suffix) for suffix in EXCLUDE_SUFFIXES)
 
 
 def main() -> int:

@@ -1,6 +1,6 @@
-# Reliability and Fail-Closed Behavior - CacheMedic++ Harness v1.1
+﻿# Reliability and Fail-Closed Behavior - CacheMedic++ Research Repository
 
-This harness treats invalid assumptions as failures and prioritizes resumable execution.
+This repository treats invalid assumptions as failures and prioritizes resumable execution.
 
 ## Fail-closed invariants (must raise)
 
@@ -31,13 +31,11 @@ This harness treats invalid assumptions as failures and prioritizes resumable ex
 ## Cost controls
 
 - Stability supports top-k logit projection and layer/head subsampling controls.
-- Sweet-spot configs are provided to reduce end-to-end wall time while preserving key paper evidence:
+- Fast configs are provided to reduce end-to-end wall time while preserving key paper evidence:
   - `configs/fast_paper_base.yaml`
   - `configs/fast_paper_sweep_core.yaml`
   - `configs/fast_second_model_gpt2_large.yaml`
 
 ## Acceptance gate alignment
 
-Acceptance gates remain defined in `docs/product-specs/70_ACCEPTANCE_GATES.md`.
-Sweet-spot operations are documented in `docs/exec-plans/40_SWEETSPOT_PAPER_OPERATIONS.md`.
-Current run status and resume entrypoint are tracked in `docs/exec-plans/35_SWEETSPOT_STATUS_BOARD.md`.
+Acceptance gates are defined in `docs/product-specs/70_ACCEPTANCE_GATES.md`.

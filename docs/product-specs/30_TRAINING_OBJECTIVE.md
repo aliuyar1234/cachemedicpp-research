@@ -1,4 +1,4 @@
-# Training Objective (KD + Identity + Contraction) — v1.0
+﻿# Training Objective (KD + Identity + Contraction)
 
 CacheMedic++ trains only `phi` (repair params). Base model weights `theta` are frozen.
 
@@ -64,7 +64,7 @@ Defaults:
 ## 5. Total loss
 `L = L_KD + lambda_id * L_id + lambda_contr * L_contr + lambda_w * ||phi||_2^2`
 
-Default: `lambda_w = 0.0` in v1.
+Default: `lambda_w = 0.0`.
 
 ## 6. Minimal sweeps (reviewer-proof)
 Required sweeps:

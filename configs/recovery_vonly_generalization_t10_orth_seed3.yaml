@@ -1,0 +1,150 @@
+# T10 strong generalization block:
+# paired contr vs no_contr on a second LOTO holdout type (orthogonal_rotation),
+# with multi-seed reporting.
+
+sweep_name: recovery_vonly_generalization_t10_orth_seed3
+base_config: configs/fast_paper_base.yaml
+
+runs:
+  - name: t10_orth_seed1234_contr
+    overrides:
+      seed: 1234
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 3.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: t10_orth_seed1234_no_contr
+    overrides:
+      seed: 1234
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 0.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: t10_orth_seed2028_contr
+    overrides:
+      seed: 2028
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 3.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: t10_orth_seed2028_no_contr
+    overrides:
+      seed: 2028
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 0.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: t10_orth_seed2029_contr
+    overrides:
+      seed: 2029
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 3.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+  - name: t10_orth_seed2029_no_contr
+    overrides:
+      seed: 2029
+      eval.ood_protocol: loto_holdout_orthogonal_rotation
+      repair.family: A
+      repair.apply_to: V
+      repair.rank: 4
+      repair.protect_layers: [10, 11]
+      train.steps: 2500
+      train.lambda_id: 4.0
+      train.lambda_contr: 0.0
+      train.alpha_contr: 0.75
+      train.clean_batch_prob: 0.45
+      eval.corruption_eval.eps: [0.0, 0.08, 0.16]
+      stability.num_prompts: 60
+      eval.tasks:
+        - name: wikitext2_ppl
+          num_examples: 400
+        - name: sst2_prompted
+          num_examples: 250
+        - name: needle_long_context
+          num_examples: 80
+
+budget:
+  max_total_gpu_hours: 12
+  per_run_gpu_hours_hint: 2
+  notes: "T10 generalization block with orthogonal_rotation holdout and 3 paired seeds."

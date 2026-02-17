@@ -1,6 +1,6 @@
-\section{Experiments}
+﻿\section{Experiments}
 
-We report results on two frozen GPT-2 models (gpt2-medium and gpt2-large) using the harness protocols bundled with this paper.
+We report results on two frozen GPT-2 models (gpt2-medium and gpt2-large) using the repository protocols bundled with this paper.
 All reported numbers are computed from the accompanying evidence JSON files (see Appendix~\ref{app:evidence_map}).
 
 \subsection{Setup}
@@ -50,8 +50,8 @@ Figure~\ref{fig:robustness} shows the full robustness curve.
 
 \subsection{Paired contraction ablation}
 Table~\ref{tab:ablations} isolates the contraction regularizer by toggling only $\lambda_{\mathrm{contr}}$.
-Contraction improves robustness AUC and reduces logit sensitivity relative to the no-contraction variant at both $\delta=1$ and $\delta=2$.
-We stress that this paired comparison is the cleanest evidence that the stability term contributes beyond the distillation objective.
+On the canonical seed, contraction improves robustness AUC and reduces logit sensitivity relative to the no-contraction variant at both $\delta=1$ and $\delta=2$.
+We treat this as a single-seed directional signal and test its reliability via multi-seed replication below.
 
 \begin{table}[t]
   \centering
@@ -61,37 +61,56 @@ We stress that this paired comparison is the cleanest evidence that the stabilit
   \input{tables/table_ablation_summary.tex}
 \end{table}
 
-\subsection{Three-seed replication (contr vs no\_contr)}
-To test run-to-run stability, we repeated the same paired configuration with two additional seeds (2026 and 2027) and combined them with the canonical seed (1234).
-Table~\ref{tab:seedrep} reports mean $\pm$ std over the 3-seed paired set.
-The average robustness AUC gain is small ($+0.0001 \pm 0.0012$), and the mean sensitivity ratios are above 1 ($1.0584 \pm 0.1628$ at $\delta=1$, $1.0892 \pm 0.2004$ at $\delta=2$), indicating substantial seed variance and no consistent stability gain across all seeds.
-We therefore treat the paired single-seed ablation as suggestive evidence and the 3-seed result as an explicit limitation that motivates stronger statistical reporting.
+\subsection{Five-seed replication (contr vs no\_contr)}
+To test run-to-run stability, we extended the paired configuration to five seeds (1234, 2026, 2027, 2028, 2029).
+Table~\ref{tab:seedrep} reports mean $\pm$ std over the 5-seed paired set.
+The average robustness AUC gain is near zero ($+0.0000 \pm 0.0009$), and mean sensitivity ratios are close to neutral ($1.0086 \pm 0.1345$ at $\delta=1$, $1.0240 \pm 0.1681$ at $\delta=2$), indicating that contraction effects are not consistently directional across seeds in this setup.
+In this regime, distillation-only repair already captures most of the task-robustness benefit; explicit contraction does not show a stable average-case gain.
 
 \begin{table}[t]
   \centering
   \small
-  \caption{Three-seed replication for the paired contraction ablation (same tuned config, seeds 1234/2026/2027). Reported as mean $\pm$ std.}
+  \caption{Five-seed replication for the paired contraction ablation (same tuned config, seeds 1234/2026/2027/2028/2029). Reported as mean $\pm$ std.}
   \label{tab:seedrep}
   \vspace{2pt}
   \input{tables/table_seed_replication_3seed.tex}
 \end{table}
 
 Table~\ref{tab:seedrep_ci} adds bootstrap uncertainty over paired seeds ($B=20{,}000$).
-All intervals include no-effect thresholds (AUC gain $=0$, ratio $=1$), reinforcing that this effect is currently not statistically stable in our small-seed regime.
+All intervals include no-effect thresholds (AUC gain $=0$, ratio $=1$), reinforcing that the current effect estimate remains statistically inconclusive.
 
 \begin{table}[t]
   \centering
-  \caption{Bootstrap uncertainty for the 3-seed paired replication (percentile CI over seed pairs, $B=20{,}000$).}
+  \caption{Bootstrap uncertainty for the 5-seed paired replication (percentile CI over seed pairs, $B=20{,}000$).}
   \label{tab:seedrep_ci}
   \vspace{2pt}
   \input{tables/table_seed_bootstrap_ci.tex}
 \end{table}
 
-\subsection{Mini hyper-sensitivity: $\lambda_{\mathrm{contr}}\in\{0,3,5\}$}
-Table~\ref{tab:lambda_sensitivity} provides a compact one-seed hyper-sensitivity check under the same tuned setup.
+\subsection{Cross-holdout replication: held-out orthogonal\_rotation (3 seeds)}
+To test whether the same conclusion holds on a different OOD split, we ran an additional paired replication with held-out \texttt{orthogonal\_rotation} using seeds 1234, 2028, and 2029.
+Table~\ref{tab:orth3} summarizes this three-seed paired comparison.
+
+Distillation-only repair (no\_contr) remains positive relative to baselines in this holdout:
+mean robustness AUC gain is $+0.0010 \pm 0.0007$ versus no defense and $+0.0006 \pm 0.0006$ versus best heuristic, with clean-score gain $+0.0115 \pm 0.0020$ versus no defense.
+By contrast, the incremental contraction effect is again not robust:
+mean AUC effect is $-0.0003 \pm 0.0003$ and mean sensitivity ratios are $0.9790 \pm 0.1200$ at $\delta=1$ and $0.9688 \pm 0.1109$ at $\delta=2$.
+Bootstrap CIs over paired seeds ($B=20{,}000$) include no-effect thresholds (AUC effect $[-0.000640, 0.000000]$, ratios $[0.841,1.058]$ and $[0.841,1.041]$).
+
+\begin{table}[t]
+  \centering
+  \small
+  \caption{Cross-holdout paired replication on held-out \texttt{orthogonal\_rotation} (3 seeds: 1234/2028/2029). Reported as mean $\pm$ std.}
+  \label{tab:orth3}
+  \vspace{2pt}
+  \input{tables/table_t10_orth_replication.tex}
+\end{table}
+
+\subsection{Mini hyper-sensitivity: contraction-weight sweep}
+Table~\ref{tab:lambda_sensitivity} provides a compact one-seed hyper-sensitivity check under the same tuned setup for $\lambda_{\mathrm{contr}}\in\{0,3,5\}$.
 The strongest setting is $\lambda_{\mathrm{contr}}=3.0$.
 Pushing contraction to $\lambda_{\mathrm{contr}}=5.0$ degrades clean score and robustness AUC and increases sensitivity beyond both $\lambda_{\mathrm{contr}}=3.0$ and $\lambda_{\mathrm{contr}}=0.0$.
-This is an explicit negative result and supports a ``sweet spot'' interpretation rather than monotonic gains from larger contraction weight.
+This is an explicit negative result and supports a ``sweet spot'' interpretation rather than monotonic gains from larger contraction weight; however this subsection is single-seed and should be interpreted as hypothesis-generating.
 
 \begin{table}[t]
   \centering
@@ -103,7 +122,7 @@ This is an explicit negative result and supports a ``sweet spot'' interpretation
 
 \subsection{Second model: gpt2-large}
 Table~\ref{tab:second_model} reports the same evaluation protocol on gpt2-large.
-CacheMedic++ shows a smaller but consistent improvement in both clean score and robustness AUC.
+CacheMedic++ improves both clean score and robustness AUC in this single-run confirmation.
 
 \begin{table}[t]
   \centering
@@ -115,7 +134,9 @@ CacheMedic++ shows a smaller but consistent improvement in both clean score and 
 
 \subsection{Stability behavior and the ``absolute stability'' limitation}
 Figure~\ref{fig:sens} reports logit sensitivity curves and includes the no-contraction ablation.
-Contraction reduces sensitivity relative to the no-contraction variant (Table~\ref{tab:ablations}), but \textbf{absolute sensitivity relative to the unmodified baseline remains higher} in this setting.
-We therefore frame CacheMedic++ primarily as a \emph{relative stabilization} method whose strongest evidence comes from paired ablations, robustness/clean tradeoffs, and second-model transfer rather than absolute stability improvements over the unmodified model.
+The canonical pair shows reduced sensitivity for contraction (Table~\ref{tab:ablations}), but replicated aggregates do not preserve a consistent directional advantage across held-out \texttt{contiguous\_overwrite} (Tables~\ref{tab:seedrep} and~\ref{tab:seedrep_ci}) or held-out \texttt{orthogonal\_rotation} (Table~\ref{tab:orth3}).
+\textbf{Absolute sensitivity relative to the unmodified baseline also remains higher} in this setting.
+We therefore frame CacheMedic++ primarily as a distillation-driven repair method; explicit contraction is currently an inconclusive add-on rather than a robust standalone win.
 
 Figure~\ref{fig:amp} further visualizes that amplification differences are concentrated in the protected layers (10--11), consistent with the operator being active only in that layer subset.
+

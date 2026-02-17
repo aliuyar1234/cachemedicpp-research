@@ -1,4 +1,4 @@
-\section{Evaluation Metrics}
+﻿\section{Evaluation Metrics}
 
 CacheMedic++ reports both task robustness and stability metrics as primary outputs.
 
@@ -21,11 +21,11 @@ We report:
 and (ii) \textbf{robustness AUC} over the evaluation severity grid (Table~\ref{tab:main}).
 
 \paragraph{Best heuristic baseline.}
-We evaluate four inference-only heuristics from the harness (reset/clear, smoothing, masking/dropout, clipping/renorm).
+We evaluate four inference-only heuristics from the repository (reset/clear, smoothing, masking/dropout, clipping/renorm).
 To avoid cherry-picking, we select \emph{best heuristic} as the heuristic with the highest robustness AUC on the evaluation grid, and report that method alongside no defense and CacheMedic++.
 
 \paragraph{Bootstrap uncertainty for paired replication.}
-For paired multi-seed comparisons (Sec.~\ref{tab:seedrep}), we report percentile bootstrap confidence intervals over seed-level paired statistics.
+For paired multi-seed comparisons (Table~\ref{tab:seedrep}), we report percentile bootstrap confidence intervals over seed-level paired statistics.
 We resample the seed pairs with replacement ($B=20{,}000$) and compute CIs from the 2.5th and 97.5th percentiles.
 We apply this to the robustness AUC gain (contr $-$ no\_contr) and sensitivity ratios at $\delta\in\{1,2\}$.
 
@@ -53,7 +53,7 @@ We report $\gamma(l,h)$ for selected layers/heads and visualize differences (Fig
 \begin{figure}[t]
   \centering
   \FigOrBox[width=0.95\linewidth]{figures/figC_logit_sensitivity.png}
-  \caption{\textbf{Logit sensitivity curves} on gpt2-medium. Contraction reduces sensitivity relative to the paired no-contraction variant, while absolute sensitivity relative to the unmodified baseline remains a limitation in this setting.}
+  \caption{\textbf{Logit sensitivity curves} on gpt2-medium. In the canonical single-seed pair, contraction lowers sensitivity relative to no\_contr; in five-seed aggregate analysis this effect is not consistently directional. Absolute sensitivity relative to the unmodified baseline remains a limitation in this setting.}
   \label{fig:sens}
 \end{figure}
 
@@ -63,3 +63,4 @@ We report $\gamma(l,h)$ for selected layers/heads and visualize differences (Fig
   \caption{\textbf{Layer/head amplification differences} on gpt2-medium. Shown is $\Delta\gamma(l,h) = \gamma_{\mathrm{CacheMedic++}}(l,h)-\gamma_{\mathrm{no\ defense}}(l,h)$ over layers 8--11 and heads 0--15. In this configuration, amplification increases are concentrated in the protected layers (10--11), aligning with the ``absolute stability'' limitation noted in the main text.}
   \label{fig:amp}
 \end{figure}
+

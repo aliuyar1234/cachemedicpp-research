@@ -1,4 +1,4 @@
-# Second model smoke test (v1.1, fast-track variant)
+# Second model smoke test (fast-track variant)
 # Confirms qualitative robustness/stability on a larger GPT-2 family model.
 
 seed: 777

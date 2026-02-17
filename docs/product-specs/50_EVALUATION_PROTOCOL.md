@@ -1,4 +1,4 @@
-# Evaluation Protocol (Tasks + Subsets + Artifacts) — v1.1
+﻿# Evaluation Protocol (Tasks + Subsets + Artifacts)
 
 This spec defines the canonical evaluation tasks and how to compute their metrics.
 
@@ -59,7 +59,7 @@ For each task, evaluate:
 - epsilon grid from config (`eval.corruption_eval.eps`)
 - corruption types in `eval.corruption_eval.types`
 - time segmentation modes:
-  - for robustness curves: use config’s `corruption.axes.time_mode`
+  - for robustness curves: use config's `corruption.axes.time_mode`
   - for long-context: enforce `old_only` with `N_recent` per config
 
 ## 5. OOD protocol (leave-one-type-out)
@@ -107,3 +107,4 @@ If `eval.measure_overhead: true`, evaluators must record:
 - GPU memory peak
 
 These are summarized into Fig B (clean regression vs overhead Pareto).
+

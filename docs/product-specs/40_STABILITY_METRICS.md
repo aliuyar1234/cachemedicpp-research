@@ -1,4 +1,4 @@
-# Stability Metrics (Primary Results) — v1.0
+﻿# Stability Metrics (Primary Results)
 
 CacheMedic++ treats stability metrics as first-class outputs.
 
@@ -25,7 +25,7 @@ And repaired sensitivity uses `z_rep`.
   - set `delta = delta_norm * u * rms_scale`, where `rms_scale` is the per-layer RMS of the clean KV tensor.
 
 ### 1.3 Cost controls
-- Optionally compute `||·||_2` over logits restricted to top-k indices from `z_clean` with `k = stability.topk_logits`.
+- Optionally compute `||Â·||_2` over logits restricted to top-k indices from `z_clean` with `k = stability.topk_logits`.
 - Default: `topk_logits = 1000`.
 
 ### 1.4 Required output

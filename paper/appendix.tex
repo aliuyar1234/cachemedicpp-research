@@ -1,4 +1,4 @@
-\appendix
+﻿\appendix
 
 \section{Appendix}
 
@@ -13,8 +13,9 @@ Training uses 2500 steps with batch size 1 and prefix length 80.
 Key hyperparameters for the gpt2-medium tuned run are:
 temperature $T{=}2.0$, $p_{\mathrm{clean}}{=}0.45$, $\lambda_{\mathrm{id}}{=}4.0$, $\lambda_{\mathrm{contr}}{=}3.0$, $\alpha_{\mathrm{contr}}{=}0.75$.
 The exact resolved configs are stored in:
-\texttt{evidence/gpt2\_medium\_contr/config\_resolved.yaml} and
-\texttt{evidence/gpt2\_medium\_no\_contr/config\_resolved.yaml}, and analogously for gpt2-large.
+\path{evidence/canonical/medium_contr/config_resolved.yaml} and
+\path{evidence/canonical/medium_no_contr/config_resolved.yaml}, and analogously for gpt2-large.
+For the cross-holdout replication block, we use the same model/operator settings but switch LOTO holdout to \texttt{orthogonal\_rotation} with paired seeds 1234/2028/2029.
 
 \subsection{Corruption operators (deterministic spec)}
 \label{app:corruptions}
@@ -23,7 +24,7 @@ Corruptions act on cached $K,V$ tensors with shape $[1,H,T,d]$ and are applied u
 All randomness uses a dedicated \texttt{torch.Generator} seeded from the run seed so that corruptions are exactly reproducible.
 
 We write the masked tensor as $X_m = X \odot m$, where the mask $m$ is the broadcast product of the chosen layer/head/time masks.
-The bundled runs instantiate the operator parameters as follows (from \texttt{evidence/*/config\_resolved.yaml}):
+The bundled runs instantiate the operator parameters as follows (from the corresponding \texttt{config\_resolved.yaml} files in the \texttt{evidence/} tree):
 
 \begingroup
 \setlength{\itemsep}{2pt}
@@ -47,7 +48,7 @@ The bundled runs instantiate the operator parameters as follows (from \texttt{ev
 \subsection{Training pseudocode (one step)}
 \label{app:train_pseudocode}
 
-The following pseudocode matches the training objective in Sec.~3 and the harness implementation (teacher and student share frozen base weights):
+The following pseudocode matches the training objective in Sec.~3 and the repository implementation (teacher and student share frozen base weights):
 \begingroup
 \footnotesize
 \begin{verbatim}
@@ -84,7 +85,8 @@ We compute label log-probabilities for the tokens corresponding to the labels \t
 Review: <text>
 Sentiment:
 \end{quote}
-Accuracy is computed over 250 examples (see \texttt{evidence/*/config\_resolved.yaml}).
+Accuracy is computed over 250 examples (see the corresponding \texttt{config\_resolved.yaml} files in the \texttt{empty\_dirs\_for\_codex outputs runs\_recovery} tree).
+Accuracy is computed over 250 examples (see the corresponding \texttt{config\_resolved.yaml} files in the \texttt{evidence/} tree).
 
 \paragraph{Needle long-context probe.}
 We generate a deterministic long context with a planted key/value pair and query for the key.
@@ -101,7 +103,7 @@ Table~\ref{tab:per_task} reports raw per-task metrics for gpt2-medium at clean a
 \begin{table}[h]
   \centering
   \small
-  \caption{Per-task metrics for gpt2-medium. ``Best heuristic'' is smoothing in this evaluation protocol.}
+  \caption{Per-task metrics for gpt2-medium under the OOD held-out \texttt{contiguous\_overwrite} protocol. Clean metrics are at $\varepsilon=0$ and corrupt metrics at $\varepsilon=0.16$. ``Best heuristic'' is smoothing in this evaluation protocol.}
   \label{tab:per_task}
   \vspace{0pt}
   \input{tables/table_per_task_breakdown_medium.tex}
@@ -113,23 +115,29 @@ Table~\ref{tab:per_task} reports raw per-task metrics for gpt2-medium at clean a
 All numeric claims in the main text are sourced from these files (relative to the bundle root):
 \begingroup
 \footnotesize
-\ttfamily
-\begin{tabular}{@{}l@{}}
-evidence/gpt2\_medium\_contr/metrics/task\_metrics.json \\
-evidence/gpt2\_medium\_contr/metrics/stability\_metrics.json \\
-evidence/gpt2\_medium\_no\_contr/metrics/task\_metrics.json \\
-evidence/gpt2\_medium\_no\_contr/metrics/stability\_metrics.json \\
-evidence/gpt2\_large\_contr/metrics/task\_metrics.json
-\end{tabular}
+\begin{itemize}[leftmargin=1.2em,itemsep=1pt,topsep=2pt]
+  \item \path{evidence/canonical/medium_contr/metrics/task_metrics.json}
+  \item \path{evidence/canonical/medium_contr/metrics/stability_metrics.json}
+  \item \path{evidence/canonical/medium_no_contr/metrics/task_metrics.json}
+  \item \path{evidence/canonical/medium_no_contr/metrics/stability_metrics.json}
+  \item \path{evidence/second_model/gpt2_large_contr/metrics/task_metrics.json}
+  \item \path{evidence/lambda/lambda5_tuned_single/metrics/task_metrics.json}
+  \item \path{evidence/lambda/lambda5_tuned_single/metrics/stability_metrics.json}
+  \item \path{evidence/seedrep_overwrite/*/metrics/*.json}
+  \item \path{evidence/seedrep_orth/*/metrics/*.json}
+\end{itemize}
 \endgroup
 
-Resolved configurations used by the harness are:
+Resolved configurations used by the repository are:
 \begingroup
 \footnotesize
-\ttfamily
-\begin{tabular}{@{}l@{}}
-evidence/gpt2\_medium\_contr/config\_resolved.yaml \\
-evidence/gpt2\_medium\_no\_contr/config\_resolved.yaml \\
-evidence/gpt2\_large\_contr/config\_resolved.yaml
-\end{tabular}
+\begin{itemize}[leftmargin=1.2em,itemsep=1pt,topsep=2pt]
+  \item \path{evidence/canonical/medium_contr/config_resolved.yaml}
+  \item \path{evidence/canonical/medium_no_contr/config_resolved.yaml}
+  \item \path{evidence/second_model/gpt2_large_contr/config_resolved.yaml}
+  \item \path{evidence/lambda/lambda5_tuned_single/config_resolved.yaml}
+  \item \path{evidence/seedrep_overwrite/*/config_resolved.yaml}
+  \item \path{evidence/seedrep_orth/*/config_resolved.yaml}
+\end{itemize}
 \endgroup
+

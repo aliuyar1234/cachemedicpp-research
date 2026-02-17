@@ -1,4 +1,4 @@
-In a quiet laboratory, a small team studied how memory affects reasoning.
+﻿In a quiet laboratory, a small team studied how memory affects reasoning.
 They wrote experiments that changed internal states rather than prompts.
 The goal was to build systems that remain reliable under small perturbations.
 A model can be fast and still brittle if a hidden cache is corrupted.
@@ -8,4 +8,5 @@ If old information is damaged, the model may drift from the intended answer.
 A simple fix like clearing memory can remove errors but also removes useful context.
 A stable method should reduce drift while keeping the clean behavior intact.
 
-This file is a deterministic offline fallback corpus for harness plumbing.
+This file is a deterministic offline fallback corpus for repository plumbing.
+

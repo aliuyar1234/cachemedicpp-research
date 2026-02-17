@@ -1,29 +1,29 @@
-# Decisions (ADR-style) — CacheMedic++ Harness v1.1
+﻿# Decisions (ADR-style) - CacheMedic++ Research Repository
 
 This file records **decisions that constrain implementation** so results are reproducible and the paper is reviewer-proof.
 
 ## ADR-0001: Freeze base model weights
-- **Decision:** Base model parameters θ are frozen; train only repair parameters φ.
+- **Decision:** Base model parameters theta are frozen; train only repair parameters phi.
 - **Rationale:** Keeps compute low and isolates the contribution to KV-state stabilization.
 - **Consequences:** Must implement clean-teacher forward; student forward with corruption + repair.
 
-## ADR-0002: v1 supports eager attention and batch size 1 only
-- **Decision:** v1 fails closed unless `attn_implementation=eager` and `batch_size=1`.
+## ADR-0002: Eager attention and batch size 1 only
+- **Decision:** The implementation fails closed unless `attn_implementation=eager` and `batch_size=1`.
 - **Rationale:** Enables unambiguous KV interception and deterministic stability metrics.
-- **Consequences:** Flash attention support can be added later but is explicitly out-of-scope for v1.
+- **Consequences:** Flash attention support can be added later but is explicitly out-of-scope for the current release.
 
 ## ADR-0003: Corruption family C is explicitly defined and deterministic
-- **Decision:** Only corruption operators listed in `docs/product-specs/10_THREAT_MODEL.md` are “in scope” for claimed robustness.
+- **Decision:** Only corruption operators listed in `docs/product-specs/10_THREAT_MODEL.md` are "in scope" for claimed robustness.
 - **Rationale:** Prevents drifting threat models and makes OOD protocols meaningful.
 - **Consequences:** Any new corruption requires a new ADR and a version bump.
 
 ## ADR-0004: Stability metrics are first-class artifacts
 - **Decision:** Logit sensitivity curves and amplification maps are required deliverables.
-- **Rationale:** Elevates the paper from “engineering patch” to “state-space stabilization with measurable gain.”
+- **Rationale:** Elevates the paper from "engineering patch" to "state-space stabilization with measurable gain."
 - **Consequences:** Must implement finite-difference sensitivity without Jacobians and with cost controls.
 
 ## ADR-0005: Offline fallback datasets must exist
-- **Decision:** If external datasets cannot be downloaded, the harness must still run on deterministic offline fallbacks.
+- **Decision:** If external datasets cannot be downloaded, the repository must still run on deterministic offline fallbacks.
 - **Rationale:** Ensures the repo is runnable in restricted environments.
 - **Consequences:** Offline data lives in `data/offline/` and is referenced by config.
 
@@ -43,6 +43,8 @@ This file records **decisions that constrain implementation** so results are rep
 - **Consequences:** `scripts/validate_configs.py` is part of `smoke_repo.sh`.
 
 ## ADR-0009: Sweep runner is part of the required CLI
-- **Decision:** The harness includes a sweep config and a required `cachemedicpp.sweep` entrypoint.
-- **Rationale:** The paper’s main matrix and OOD protocol must be runnable without manual orchestration.
+- **Decision:** The repository includes a sweep config and a required `cachemedicpp.sweep` entrypoint.
+- **Rationale:** The paper's main matrix and OOD protocol must be runnable without manual orchestration.
 - **Consequences:** Implementation must support dot-key overrides and OOD leave-one-type-out wiring.
+
+

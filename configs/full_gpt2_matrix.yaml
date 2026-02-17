@@ -1,4 +1,4 @@
-# Full GPT-2 matrix sweep (v1.1)
+# Full GPT-2 matrix sweep 
 # Intended to run within <= 72 GPU-hours total by using small subsets.
 
 sweep_name: full_gpt2_matrix_v1_1

@@ -1,16 +1,14 @@
-# Architecture — CacheMedic++ Harness (v1.1)
+﻿# Architecture - CacheMedic++ Research Repository
 
-This harness defines **interfaces, contracts, and artifacts** for implementing CacheMedic++.
+This repository defines **interfaces, contracts, and artifacts** for implementing CacheMedic++.
 
-Operational run status and pause/resume entrypoint:
-
-- `docs/exec-plans/35_SWEETSPOT_STATUS_BOARD.md`
+Operational run artifacts are written to per-run directories and described in `REPRODUCIBILITY.md`.
 
 ## Design goals
 - **Spec-first SSOT:** canonical definitions live in `docs/product-specs/`.
-- **Fail-closed:** v1 assumes **bsz=1** and **eager attention**; any other mode must raise.
+- **Fail-closed:** Assumes **bsz=1** and **eager attention**; any other mode must raise.
 - **Determinism:** corruption masks and rotations must be reproducible from seeds.
-- **Fast cycles:** most experiments run in **1–6 GPU-hours**; main matrix fits **≤72 GPU-hours**.
+- **Fast cycles:** most experiments run in **1-6 GPU-hours**; main matrix fits **<=72 GPU-hours**.
 
 ## System components
 1. **HF Attention Patch Layer**
@@ -18,7 +16,7 @@ Operational run status and pause/resume entrypoint:
    - Applies corruption operator `C` (when enabled) then repair operator `R_phi`.
 
 2. **Corruption Engine**
-   - Implements the family `C` with deterministic masking axes and mixture distribution `Π`.
+   - Implements the family `C` with deterministic masking axes and mixture distribution `Pi`.
    - Must support: gaussian noise, dropout/zeroing, orthogonal rotation, sparse bitflip-ish sign/jump, quantization noise, contiguous overwrite, targeted layer/head wrapper.
 
 3. **Repair Operators (R_phi)**
@@ -51,7 +49,7 @@ Codex must implement these entrypoints in package `cachemedicpp`.
 
 ### Train
 ```bash
-python -m cachemedicpp.train --config configs/mve.yaml --run_dir empty_dirs_for_codex/outputs/runs/<RUN_ID>
+python -m cachemedicpp.train --config configs/mve.yaml --run_dir outputs/runs/<RUN_ID>
 ```
 - Writes `run_record.json`, `config_resolved.yaml`, `env.json`, `git.json`.
 - Writes checkpoints: `checkpoints/repair_step_<N>.pt` (repair params only).
@@ -61,7 +59,7 @@ python -m cachemedicpp.train --config configs/mve.yaml --run_dir empty_dirs_for_
 
 ### Eval (task robustness)
 ```bash
-python -m cachemedicpp.eval --config configs/mve.yaml --run_dir empty_dirs_for_codex/outputs/runs/<RUN_ID> [--resume|--no-resume]
+python -m cachemedicpp.eval --config configs/mve.yaml --run_dir outputs/runs/<RUN_ID> [--resume|--no-resume]
 ```
 - Writes `metrics/task_metrics.json` and per-eps curves.
 - Appends eval summaries to `logs/eval.jsonl`.
@@ -71,7 +69,7 @@ python -m cachemedicpp.eval --config configs/mve.yaml --run_dir empty_dirs_for_c
 
 ### Stability
 ```bash
-python -m cachemedicpp.stability --config configs/mve.yaml --run_dir empty_dirs_for_codex/outputs/runs/<RUN_ID> [--resume|--no-resume]
+python -m cachemedicpp.stability --config configs/mve.yaml --run_dir outputs/runs/<RUN_ID> [--resume|--no-resume]
 ```
 - Writes `metrics/stability_metrics.json`.
 - Writes phase heartbeat artifacts: `logs/stability_heartbeat.json` and `logs/stability_heartbeat.jsonl`.
@@ -80,13 +78,13 @@ python -m cachemedicpp.stability --config configs/mve.yaml --run_dir empty_dirs_
 
 ### Plots
 ```bash
-python -m cachemedicpp.plots --run_dir empty_dirs_for_codex/outputs/runs/<RUN_ID>
+python -m cachemedicpp.plots --run_dir outputs/runs/<RUN_ID>
 ```
 - Writes figures under `paper/figures/` **inside the run directory** with locked names.
 
 ### Sweep
 ```bash
-python -m cachemedicpp.sweep --sweep_config configs/full_gpt2_matrix.yaml --out_root empty_dirs_for_codex/outputs/runs [--resume|--no-resume]
+python -m cachemedicpp.sweep --sweep_config configs/full_gpt2_matrix.yaml --out_root outputs/runs [--resume|--no-resume]
 ```
 - Validates the sweep config against `schemas/sweep.schema.json`.
 - Loads the base config and applies dot-key overrides per run.
@@ -99,7 +97,7 @@ python -m cachemedicpp.sweep --sweep_config configs/full_gpt2_matrix.yaml --out_
 
 ### Watch (monitoring)
 ```bash
-python -m cachemedicpp.watch --run_dir empty_dirs_for_codex/outputs/runs/<RUN_ID> --follow --stop_on_terminal
+python -m cachemedicpp.watch --run_dir outputs/runs/<RUN_ID> --follow --stop_on_terminal
 ```
 - Reads latest available phase heartbeat (`train`, `eval`, `stability`, `sweep`) and prints a live dashboard.
 
@@ -134,7 +132,7 @@ Within a run directory `<RUN_DIR>`:
 - `metrics/stability_progress.json`
 - `run_record.json`
 
-## Batch size and attention implementation constraints (v1)
+## Batch size and attention implementation constraints
 - **bsz=1 only**. Raise if `input_ids.shape[0] != 1`.
 - **Eager attention only**. If model uses flash/fused attention, raise with a clear message.
 - KV shapes are assumed to be `[1, heads, time, head_dim]` per layer.
@@ -144,5 +142,7 @@ Within a run directory `<RUN_DIR>`:
 - Method name: **CacheMedic++**
 - Repair operator: `R_phi`
 - Corruption family: `C`
-- Corruption mixture: `Π`
+- Corruption mixture: `Pi`
 - Contraction target: `alpha_contr` and hinge penalty with `eps0`.
+
+

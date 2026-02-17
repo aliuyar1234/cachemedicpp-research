@@ -1,12 +1,12 @@
-# Acceptance Gates (Pass Criteria + Pivot Triggers) — v1.1
+﻿# Acceptance Gates (Pass Criteria + Pivot Triggers)
 
-These gates define what counts as “done” at each milestone. They are designed for single-GPU fast iteration.
+These gates define what counts as "done" at each milestone. They are designed for single-GPU fast iteration.
 
-## Gate 0 — Plumbing (implementation readiness)
-**Goal:** the harness can run corruption and repair in the correct insertion point.
+## Gate 0 - Plumbing (implementation readiness)
+**Goal:** the repository can run corruption and repair in the correct insertion point.
 
 **Pass criteria:**
-- v1 fail-closed behavior is enforced (bsz=1; eager attention only).
+- Fail-closed behavior is enforced (bsz=1; eager attention only).
 - For epsilon=0, corruption is identity and repair does not change outputs beyond numeric noise.
   - acceptance check: max absolute logit diff <= `1e-4` (float32) or <= `5e-3` (bf16/fp16) on a fixed prompt.
 - The corruption engine reproduces identical outputs given the same seed.
@@ -14,7 +14,7 @@ These gates define what counts as “done” at each milestone. They are designe
 **Pivot triggers:**
 - KV interception requires flash attention: switch model family or disable flash; do not proceed until eager path works.
 
-## Gate 1 — Money plots (24h)
+## Gate 1 - Money plots (24h)
 **Goal:** produce three core figures for the MVE config.
 
 **Required artifacts:**
@@ -32,7 +32,7 @@ These gates define what counts as “done” at each milestone. They are designe
 - Clean regression exceeds tolerance consistently: increase `lambda_id`, increase `clean_batch_prob`, reduce protected layers.
 - No robustness gain vs heuristics: switch operator family from A to B or restrict to V-only.
 
-## Gate 2 — OOD generalization
+## Gate 2 - OOD generalization
 **Goal:** show robustness and stability generalize beyond the training corruption mix.
 
 **Pass criteria:**
@@ -42,7 +42,7 @@ These gates define what counts as “done” at each milestone. They are designe
 **Pivot triggers:**
 - OOD collapse: train with broader mixture and add contraction annealing.
 
-## Gate 3 — Second-model confirmation
+## Gate 3 - Second-model confirmation
 **Goal:** confirm qualitative effect on a larger model.
 
 **Pass criteria:**
@@ -51,10 +51,11 @@ These gates define what counts as “done” at each milestone. They are designe
 **Pivot triggers:**
 - Hooking fails: implement model-specific attention patching but do not alter the insertion point.
 
-## Gate 4 — Packaging and submission readiness
+## Gate 4 - Packaging and submission readiness
 **Goal:** repo is auditable and paper compiles.
 
 **Pass criteria:**
 - `scripts/smoke_repo.sh` passes.
 - Run directories include `run_record.json`, config snapshot, env capture, and locked figures/tables.
 - LaTeX paper compiles given the produced figures/tables.
+

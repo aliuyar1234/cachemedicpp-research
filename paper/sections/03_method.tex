@@ -1,4 +1,4 @@
-\section{CacheMedic++}
+﻿\section{CacheMedic++}
 
 CacheMedic++ adds a small stability operator $R_\phi$ that repairs the KV cache \emph{inside} the attention computation.
 The base model weights $\theta$ are frozen; only $\phi$ is trained.
@@ -14,7 +14,7 @@ and compute attention using $K_{\mathrm{hat}},V_{\mathrm{hat}}$.
 In our canonical runs, $R_\phi$ is applied only on a small set of protected layers $\mathcal{L}_{\mathrm{prot}}$ and is the identity elsewhere.
 
 \subsection{Repair operator family (Option A, used in results)}
-We use Option A from the harness: a \textbf{query-conditioned low-rank additive} correction.
+We use Option A from the repository: a \textbf{query-conditioned low-rank additive} correction.
 Parameters are shared across heads by default.
 For a protected layer, let $r$ be the rank and $d$ the head dimension.
 Let $V \in \mathbb{R}^{1\times H\times T\times d}$ and $q \in \mathbb{R}^{1\times H\times d}$ be the per-head query for the current step.
@@ -78,3 +78,4 @@ Our tuned run uses $T{=}2.0$, $p_{\mathrm{clean}}{=}0.45$, $\lambda_{\mathrm{id}
   \caption{\textbf{Clean-score / throughput tradeoff} on gpt2-medium. We measure decoding throughput (tokens/sec) on the same evaluation setting used for Table~\ref{tab:main}. CacheMedic++ preserves most of the baseline throughput while improving clean score.}
   \label{fig:overhead}
 \end{figure}
+

@@ -1,0 +1,106 @@
+seed: 1234
+device: cuda
+dtype: bfloat16
+model:
+  name: gpt2-medium
+  revision: null
+  attn_implementation: eager
+  use_cache: true
+repair:
+  family: A
+  rank: 4
+  protect_layers:
+  - 10
+  - 11
+  share_across_heads: true
+  apply_to: V
+  alpha_max: 0.9
+corruption:
+  mixture: outputs\runs_recovery\recovery_vonly_lambda5_tuned_single\main_contr_vonly_tuned_loto_overwrite_lambda5\ood_train_mix.yaml
+  eps_grid:
+  - 0.0
+  - 0.01
+  - 0.02
+  - 0.04
+  - 0.08
+  - 0.16
+  axes:
+    layer_mode: all
+    head_mode: bernoulli
+    p_head: 0.25
+    time_mode: old_only
+    N_recent: 32
+  params:
+    dropout_p: 0.02
+    bitflip_p: 0.0005
+    bitflip_eps_jump: 8.0
+    quant_bits: 8
+    rotation_seed: 999
+    overwrite_window:
+    - 16
+    - 48
+    donor_prompt: 'Donor: This is a deterministic donor prompt for contiguous KV overwrite
+      evaluation.'
+train:
+  steps: 2500
+  lr: 0.0002
+  batch_size: 1
+  prefix_len: 80
+  temperature: 2.0
+  lambda_id: 4.0
+  lambda_contr: 5.0
+  alpha_contr: 0.75
+  clean_batch_prob: 0.45
+  grad_clip: 1.0
+  log_every: 50
+  save_every: 1500
+baseline:
+  smoothing_beta: 0.3
+  dropout_p: 0.02
+  clip_val: 6.0
+  target_rms: 1.0
+eval:
+  max_seq_len: 256
+  measure_overhead: true
+  ood_protocol: loto_holdout_contiguous_overwrite
+  tasks:
+  - name: wikitext2_ppl
+    num_examples: 400
+  - name: sst2_prompted
+    num_examples: 250
+  - name: needle_long_context
+    num_examples: 80
+  corruption_eval:
+    eps:
+    - 0.0
+    - 0.08
+    - 0.16
+    types:
+    - contiguous_overwrite
+stability:
+  num_prompts: 60
+  delta_norms:
+  - 0.0
+  - 1.0
+  - 2.0
+  num_directions: 4
+  topk_logits: 512
+  layers:
+  - 8
+  - 9
+  - 10
+  - 11
+  time_mode: old_only
+  N_recent: 32
+data:
+  use_offline: false
+  offline_paths:
+    wikitext2: data/offline/wikitext2_sample.txt
+    sst2: data/offline/sst2_sample.jsonl
+  long_context:
+    seed: 2025
+    context_len: 2048
+    needle_token: the_key
+    needle_value: violet-7
+    position_frac: 0.35
+    question_template: 'Question: What is {needle_token}? Answer:'

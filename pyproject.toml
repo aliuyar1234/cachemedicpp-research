@@ -1,7 +1,7 @@
 [project]
-name = "cachemedicpp-harness"
+name = "cachemedicpp-research-repo"
 version = "1.1.0"
-description = "Harness repository for CacheMedic++ (specs, configs, paper skeleton)."
+description = "System-of-record research repository for CacheMedic++ (specs, configs, reproducibility, paper)."
 requires-python = ">=3.10"
 
 [tool.black]

@@ -1,4 +1,4 @@
-# OOD leave-one-type-out sweep (all holdout types, v1.1)
+# OOD leave-one-type-out sweep (all holdout types)
 # Runs each split with the canonical MVE base config.
 
 sweep_name: ood_loto_all_v1_1

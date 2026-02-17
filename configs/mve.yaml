@@ -1,4 +1,4 @@
-# CacheMedic++ MVE config (v1.1)
+# CacheMedic++ MVE config 
 # Produces figA/B/C and stability metrics in <= 24h.
 
 seed: 1234

@@ -1,4 +1,4 @@
-# Repair / Stability Operators R_phi (v1.0)
+﻿# Repair / Stability Operators R_phi
 
 This spec defines the insertion point and the three operator families for `R_phi`.
 
@@ -10,7 +10,7 @@ For each attention layer:
 4. **Apply repair**: `(K_hat, V_hat) = R_phi(q, K_corr, V_corr)`.
 5. Compute attention logits with `q` and `K_hat`.
 
-### v1 constraints
+### Current constraints
 - bsz=1 only.
 - eager attention path only.
 
@@ -84,7 +84,7 @@ Same functional form as A/B with lower parameter memory and better reuse.
 - Cons: may miss head-specific vulnerabilities.
 
 ## 5. Default choice
-v1 default is **Option A** with:
+Default is **Option A** with:
 - `share_across_heads: true`
 - `rank: 8`
 - `apply_to: KV`

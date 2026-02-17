@@ -1,8 +1,8 @@
-\section{Limitations and Ethical Considerations}
+﻿\section{Limitations and Ethical Considerations}
 
 \paragraph{Limitations.}
 \begin{itemize}
-  \item \textbf{Absolute stability is not the central win.} In our stability measurements, CacheMedic++ does not consistently reduce \emph{absolute} logit sensitivity compared to the unmodified baseline (Fig.~\ref{fig:sens}). Our strongest evidence is (i) the paired contraction-vs-no-contraction ablation (Table~\ref{tab:ablations}), (ii) robustness/clean tradeoffs (Table~\ref{tab:main}), and (iii) second-model qualitative transfer (Table~\ref{tab:second_model}).
+  \item \textbf{Absolute stability is not the central win.} In our stability measurements, CacheMedic++ does not consistently reduce \emph{absolute} logit sensitivity compared to the unmodified baseline (Fig.~\ref{fig:sens}). Our strongest evidence is (i) robustness/clean tradeoffs for distillation-based repair (Table~\ref{tab:main}), (ii) second-model qualitative transfer (Table~\ref{tab:second_model}), and (iii) transparent reporting that contraction is neutral on average in five-seed replication (Tables~\ref{tab:seedrep},~\ref{tab:seedrep_ci}).
   \item \textbf{Simulated fault model.} Our corruption operators are deterministic simulations of cache perturbations; they are not direct measurements of hardware faults or real-world adversaries. Generalization to other fault distributions is an open question.
   \item \textbf{Scope of models and implementations.} The bundled evidence covers GPT-2 models with batch size 1 and eager attention. We do not evaluate flash attention implementations or larger LLMs.
   \item \textbf{Task coverage.} The needle-style long-context probe yields zero accuracy for all methods in the bundled runs; thus improvements in the aggregate score are driven by the other tasks (Appendix~\ref{app:eval_details}).
@@ -11,17 +11,18 @@
 \subsection{Threats to validity}
 \paragraph{Internal validity.}
 Our conclusions rely on strict config matching between paired runs; accidental mismatch in corruption injection, checkpoint selection, or metric aggregation could bias ablation outcomes.
-We mitigate this with explicit evidence-path mapping and paired run records, but latent harness bugs remain possible.
+We mitigate this with explicit evidence-path mapping and paired run records, but latent repository bugs remain possible.
 
 \paragraph{External validity.}
 Results are from GPT-2 medium/large with eager attention and batch size 1 under a synthetic but deterministic corruption family.
 Transfer to larger models, other inference kernels (for example flash attention), or non-simulated real-world fault patterns is not established.
 
 \paragraph{Statistical validity.}
-The 3-seed replication shows high variance, and bootstrap CIs over paired seeds cross no-effect thresholds.
+Across both the 5-seed held-out \texttt{contiguous\_overwrite} replication and the 3-seed held-out \texttt{orthogonal\_rotation} replication, paired bootstrap CIs cross no-effect thresholds.
 Therefore, claims about contraction should be interpreted as provisional at current sample size and motivate larger replicated studies.
 
 \paragraph{Ethical considerations.}
 This work studies how cache corruption affects model outputs and proposes a defensive repair mechanism.
 While our threat model includes targeted cache manipulations, we focus on reproducible perturbations that enable evaluation, and we report limitations in absolute stability.
 We do not claim a security guarantee; deploying defenses in adversarial settings requires broader threat modeling and auditing.
+

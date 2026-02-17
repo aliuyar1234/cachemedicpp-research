@@ -2,10 +2,11 @@
 \toprule
 Claim (main text) & Value & Evidence source \\
 \midrule
-gpt2-medium clean score (CacheMedic++) & 0.2466 & \path{evidence/gpt2_medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.clean\_regression.cachemedic} \\
-gpt2-medium robustness AUC (CacheMedic++) & 0.0401 & \path{evidence/gpt2_medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.robustness\_auc.cachemedic} \\
-Paired ablation AUC (no\_contr $\rightarrow$ contr) & 0.0388 $\rightarrow$ 0.0401 & \path{evidence/gpt2_medium_no_contr/metrics/task_metrics.json} and \path{evidence/gpt2_medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.robustness\_auc.cachemedic} \\
-Paired sensitivity ratios ($\delta=1,2$) & 0.9291, 0.9266 & \path{evidence/gpt2_medium_no_contr/metrics/stability_metrics.json} and \path{evidence/gpt2_medium_contr/metrics/stability_metrics.json} \newline \texttt{metrics["stability.logit\_sensitivity"]} \\
-gpt2-large clean score / robustness AUC (CacheMedic++) & 0.3001 / 0.0475 & \path{evidence/gpt2_large_contr/metrics/task_metrics.json} \newline \texttt{metrics.clean\_regression.cachemedic}, \texttt{metrics.robustness\_auc.cachemedic} \\
+gpt2-medium clean score (CacheMedic++) & 0.2466 & \path{evidence/canonical/medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.clean\_regression.cachemedic} \\
+gpt2-medium robustness AUC (CacheMedic++) & 0.0401 & \path{evidence/canonical/medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.robustness\_auc.cachemedic} \\
+Paired ablation AUC (no\_contr $\rightarrow$ contr) & 0.0388 $\rightarrow$ 0.0401 & \path{evidence/canonical/medium_no_contr/metrics/task_metrics.json} and \path{evidence/canonical/medium_contr/metrics/task_metrics.json} \newline \texttt{metrics.robustness\_auc.cachemedic} \\
+Paired sensitivity ratios ($\delta=1,2$) & 0.9291, 0.9266 & \path{evidence/canonical/medium_no_contr/metrics/stability_metrics.json} and \path{evidence/canonical/medium_contr/metrics/stability_metrics.json} \newline \texttt{metrics["stability.logit\_sensitivity"]} \\
+Cross-holdout paired effect (orth\_rotation, 3 seeds) & AUC $\Delta=-0.0003\pm0.0003$; ratios 0.9790, 0.9688 & computed from \path{evidence/seedrep_orth/*/metrics/task_metrics.json} and \path{evidence/seedrep_orth/*/metrics/stability_metrics.json} \\
+gpt2-large clean score / robustness AUC (CacheMedic++) & 0.3001 / 0.0475 & \path{evidence/second_model/gpt2_large_contr/metrics/task_metrics.json} \newline \texttt{metrics.clean\_regression.cachemedic}, \texttt{metrics.robustness\_auc.cachemedic} \\
 \bottomrule
 \end{tabular}

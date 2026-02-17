@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{enumitem}
+
+\title{CacheMedic++: Robust KV-Cache Stabilization via Self-Distillation}
+\author{Ali Uyar\\Independent Researcher}
+\date{}
+
+\newcommand{\FigOrBox}[2][]{%
+  \IfFileExists{#2}{\includegraphics[#1]{#2}}{\fbox{Missing figure: #2}}%
+}
+\newcommand{\InputOrBox}[1]{%
+  \IfFileExists{#1}{\input{#1}}{\fbox{Missing file: #1}}%
+}
+\hypersetup{hidelinks}
+\Urlmuskip=0mu plus 1mu\relax
+\captionsetup{font=small,labelfont=bf}
+\setlist[itemize]{leftmargin=1.25em,itemsep=0.2em,topsep=0.2em}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{6pt}
+\setlength{\belowcaptionskip}{0pt}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Large language models rely on the key--value (KV) cache for efficient autoregressive inference, but this persistent internal state is vulnerable to corruption that can induce output drift without changing prompts or weights. We propose CacheMedic++, a lightweight in-attention KV repair operator trained with frozen base model weights via self-distillation. On our canonical gpt2-medium setting, CacheMedic++ improves clean score from 0.2373 to 0.2466 and robustness AUC from 0.0390 (best heuristic) to 0.0401. We further evaluate an explicit contraction regularizer on top of the same distillation recipe: the canonical paired run shows gains (AUC 0.0388 $\rightarrow$ 0.0401; sensitivity ratios 0.9291 at $\delta{=}1.0$ and 0.9266 at $\delta{=}2.0$), but five-seed replication on held-out \texttt{contiguous\_overwrite} yields near-neutral average effects ($+0.0000 \pm 0.0009$ AUC gain) with bootstrap intervals spanning no effect. A second multi-seed replication on held-out \texttt{orthogonal\_rotation} shows the same pattern (AUC effect $-0.0003 \pm 0.0003$). The same operator family transfers qualitatively to gpt2-large, improving clean score from 0.2974 to 0.3001 and robustness AUC from 0.0472 to 0.0475. Overall, the most reliable signal in this evidence bundle is distillation-driven KV repair; explicit contraction remains inconclusive at current sample size.
+\end{abstract}
+
+\InputOrBox{sections/01_introduction.tex}
+\InputOrBox{sections/02_threat_model.tex}
+\InputOrBox{sections/03_method.tex}
+\InputOrBox{sections/04_metrics.tex}
+\InputOrBox{sections/05_experiments.tex}
+\InputOrBox{sections/06_related_work.tex}
+\InputOrBox{sections/07_limitations_ethics.tex}
+
+\input{bibliography.tex}
+
+\clearpage
+\InputOrBox{appendix.tex}
+\end{document}

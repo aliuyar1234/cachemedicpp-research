@@ -1,9 +1,9 @@
-# Threat / Fault Model — Corruption Family C (v1.0)
+﻿# Threat / Fault Model - Corruption Family C
 
 This spec defines the canonical corruption family `C` used to train and evaluate CacheMedic++.
 
 ## 1. State representation
-- v1 assumes batch size `B=1`.
+- The current setup assumes batch size `B=1`.
 - For each transformer layer `l`, the KV cache tensors are:
   - `K[l]` and `V[l]` with shape `[1, H, T, d]` (dtype = model dtype).
 - A full protected state is `S = { (K[l],V[l]) for l in protect_layers }`.
@@ -17,9 +17,9 @@ Each corruption op is applied under three masks:
 Mask sampling uses a dedicated `torch.Generator` seeded from `config.seed`.
 
 ### 2.1 Layer modes
-- `layer_mode: "all"` → apply to all layers in `protect_layers`.
-- `layer_mode: "bernoulli"` → sample `layer_mask[l] ~ Bernoulli(p_layer)` for each protected layer.
-- `layer_mode: "targeted"` → apply only to `layers: [...]`.
+- `layer_mode: "all"` -> apply to all layers in `protect_layers`.
+- `layer_mode: "bernoulli"` -> sample `layer_mask[l] ~ Bernoulli(p_layer)` for each protected layer.
+- `layer_mode: "targeted"` -> apply only to `layers: [...]`.
 
 ### 2.2 Head modes
 - `head_mode: "all"`
@@ -27,9 +27,9 @@ Mask sampling uses a dedicated `torch.Generator` seeded from `config.seed`.
 - `head_mode: "targeted"` with `heads: [...]`
 
 ### 2.3 Time/segment modes
-- `time_mode: "all_past"` → corrupt all cached timesteps.
-- `time_mode: "old_only"` → corrupt only timesteps `t < T - N_recent`.
-- `time_mode: "window"` with `window: [a,b]` → corrupt timesteps `a <= t < b`.
+- `time_mode: "all_past"` -> corrupt all cached timesteps.
+- `time_mode: "old_only"` -> corrupt only timesteps `t < T - N_recent`.
+- `time_mode: "window"` with `window: [a,b]` -> corrupt timesteps `a <= t < b`.
 
 ## 3. Severity schedule and mixture Pi
 Severity is controlled by:
@@ -46,7 +46,7 @@ A corruption run uses a mixture `Pi` that samples:
 The canonical default mixture is encoded in `configs/corruption/default_mix.yaml`.
 
 ## 4. Corruption operators (torch-only pseudocode)
-All operators below are specified for a single layer’s tensors `K,V` of shape `[1,H,T,d]`.
+All operators below are specified for a single layer's tensors `K,V` of shape `[1,H,T,d]`.
 
 ### Shared helpers
 ```python
@@ -180,3 +180,4 @@ The targeted wrapper applies any corruption type but forces `layer_mode=targeted
 ## 5. Determinism notes
 - Use a single `torch.Generator` per run for all corruption sampling.
 - Log every sampled corruption event (type, epsilon, masks summary) to `logs/train.jsonl`.
+

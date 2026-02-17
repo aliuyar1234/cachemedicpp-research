@@ -1,12 +1,12 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Fail if the repo contains junk artifacts.
 
-Policy (v1.1):
+Policy:
 - No __pycache__ directories
 - No .pyc files
 - No OS junk like .DS_Store
 
-Rationale: the harness ZIP should be a clean system-of-record artifact.
+Rationale: the repository ZIP should be a clean system-of-record artifact.
 """
 
 from pathlib import Path
@@ -47,3 +47,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
