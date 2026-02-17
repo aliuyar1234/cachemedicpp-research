@@ -28,3 +28,12 @@ docs/design-docs/
 docs/generated/
 docs/references/
 EDITORIAL_NOTES.md
+
+# Internal root docs
+AGENTS.md
+ARCHITECTURE.md
+CHANGELOG.md
+DECISIONS.md
+RELIABILITY.md
+REPRODUCIBILITY.md
+SECURITY.md

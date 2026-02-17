@@ -1,22 +1,55 @@
 # CacheMedic++ Research Repository
 
-This repository is the **system-of-record** for CacheMedic++: specs, configs, schemas, reproducibility artifacts, and paper sources.
+[![Paper PDF](https://img.shields.io/badge/Paper-Download%20PDF-red?logo=adobeacrobatreader&logoColor=white)](https://github.com/aliuyar1234/cachemedicpp-research/raw/master/paper/cachemedicpp_paper.pdf)
+[![Smoke Checks](https://img.shields.io/badge/Smoke%20Checks-Passing-brightgreen)](scripts/smoke_repo.sh)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Evidence](https://img.shields.io/badge/Evidence-Bundled-6f42c1)](evidence/)
 
-Start here: `AGENTS.md`
+CacheMedic++ is a research repository for robust KV-cache repair under deterministic corruption protocols.  
+It contains the manuscript, compact evidence artifacts, runnable configs, schemas, and reproducibility checks in one auditable package.
 
-Core references:
-- `docs/product-specs/00_SSOT_INDEX.md`
-- `ARCHITECTURE.md`
-- `paper/cachemedicpp_paper.tex`
-- `paper/appendix.tex`
+## Quick Links
+- Paper source: `paper/cachemedicpp_paper.tex`
+- Paper PDF (direct download): `paper/cachemedicpp_paper.pdf`
+- Evidence artifacts: `evidence/`
+- Canonical spec index: `docs/product-specs/00_SSOT_INDEX.md`
+- Configs: `configs/`
+- Schemas: `schemas/`
+- Integrity/quality checks: `scripts/smoke_repo.sh`
 
-Repository quality gate:
+## Repository Layout
+- `paper/` manuscript source, tables, figures, appendix, bibliography
+- `evidence/` compact run artifacts referenced in the paper
+- `docs/product-specs/` single source of truth for protocols and metrics
+- `configs/` experiment, ablation, and sweep configurations
+- `schemas/` config and artifact schema contracts
+- `empty_dirs_for_codex/src/cachemedicpp/` implementation modules
+- `scripts/` reproducibility, validation, and smoke checks
+
+## Reproducibility
+Run the full repository gate from root:
+
 ```bash
 bash scripts/smoke_repo.sh
 ```
 
-## Current status (2026-02-17)
-- Paper package is submission-ready and compile-tested.
-- Canonical evidence links in LaTeX are aligned with bundled run artifacts.
-- Main and ablation tables are evidence-backed and contract-checked.
-- Reproducibility and integrity checks pass through `scripts/smoke_repo.sh`.
+This verifies:
+- no junk artifacts
+- no placeholder tokens
+- Markdown link integrity
+- paper contract and evidence consistency
+- config/schema compatibility
+- full manifest integrity (`MANIFEST.sha256`)
+
+## Build The Paper
+From `paper/`:
+
+```bash
+latexmk -pdf -interaction=nonstopmode -halt-on-error cachemedicpp_paper.tex
+```
+
+## Status
+- Submission-ready paper package
+- Evidence-linked claims in LaTeX
+- Manifest-verified repository state

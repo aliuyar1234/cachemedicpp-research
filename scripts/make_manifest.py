@@ -14,7 +14,16 @@ Output format:
 import hashlib
 from pathlib import Path
 
-EXCLUDE_FILES = {"MANIFEST.sha256"}
+EXCLUDE_FILES = {
+    "MANIFEST.sha256",
+    "AGENTS.md",
+    "ARCHITECTURE.md",
+    "CHANGELOG.md",
+    "DECISIONS.md",
+    "RELIABILITY.md",
+    "REPRODUCIBILITY.md",
+    "SECURITY.md",
+}
 # .git is not part of the shipped artifact, but developers may run this script in a checkout.
 EXCLUDE_DIRS = {".git"}
 EXCLUDE_PATH_PREFIXES = {
