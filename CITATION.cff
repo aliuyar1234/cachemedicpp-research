@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the manuscript and software package below."
+type: software
+title: "CacheMedic++ Research Repository"
+version: "1.1.0"
+date-released: 2026-02-17
+license: "MIT"
+authors:
+  - family-names: "Uyar"
+    given-names: "Ali"
+    affiliation: "Independent Researcher"
+repository-code: "https://github.com/aliuyar1234/cachemedicpp-research"
+url: "https://github.com/aliuyar1234/cachemedicpp-research"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.18669268"
+preferred-citation:
+  type: software
+  title: "CacheMedic++ Research Repository"
+  authors:
+    - family-names: "Uyar"
+      given-names: "Ali"
+  year: 2026
+  publisher: "Zenodo"
+  version: "1.1.0"
+  doi: "10.5281/zenodo.18669268"
+  url: "https://doi.org/10.5281/zenodo.18669268"

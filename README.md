@@ -1,6 +1,7 @@
 # CacheMedic++ Research Repository
 
 [![Paper PDF](https://img.shields.io/badge/Paper-Download%20PDF-red?logo=adobeacrobatreader&logoColor=white)](https://github.com/aliuyar1234/cachemedicpp-research/raw/master/paper/cachemedicpp_paper.pdf)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18669268.svg)](https://doi.org/10.5281/zenodo.18669268)
 [![Smoke Checks](https://img.shields.io/badge/Smoke%20Checks-Passing-brightgreen)](scripts/smoke_repo.sh)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -47,6 +48,21 @@ From `paper/`:
 
 ```bash
 latexmk -pdf -interaction=nonstopmode -halt-on-error cachemedicpp_paper.tex
+```
+
+## How To Cite
+Use the repository metadata in `CITATION.cff` or this BibTeX entry:
+
+```bibtex
+@software{uyar2026cachemedicpp,
+  author    = {Uyar, Ali},
+  title     = {CacheMedic++ Research Repository},
+  year      = {2026},
+  version   = {1.1.0},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.18669268},
+  url       = {https://doi.org/10.5281/zenodo.18669268}
+}
 ```
 
 ## Status
