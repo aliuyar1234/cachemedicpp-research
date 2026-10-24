@@ -13,7 +13,7 @@ repository-code: "https://github.com/aliuyar1234/cachemedicpp-research"
 url: "https://github.com/aliuyar1234/cachemedicpp-research"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.18669268"
+    value: "10.5281/zenodo.18669267"
 preferred-citation:
   type: software
   title: "CacheMedic++ Research Repository"
@@ -23,5 +23,5 @@ preferred-citation:
   year: 2026
   publisher: "Zenodo"
   version: "1.1.0"
-  doi: "10.5281/zenodo.18669268"
-  url: "https://doi.org/10.5281/zenodo.18669268"
+  doi: "10.5281/zenodo.18669267"
+  url: "https://doi.org/10.5281/zenodo.18669267"
